@@ -28,10 +28,10 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
     this.log.debug(`Executing key fetching query: ${query}`);
     const keyRow: { key: string } = await this.em
       .getConnection()
-      .execute(query);
+      .execute(query, [], 'get');
     this.log.debug(`Key is ${keyRow.key}`);
 
-    return decode(token, this.key, false, 'HS256');
+    return decode(token, keyRow.key, false, 'HS256');
   }
 
   async createToken(payload: unknown): Promise<string> {
