@@ -4,9 +4,7 @@ Broken Crystals is a benchmark application that uses modern technologies and imp
 
 The application contains:
 
-- React based web client
-  - FE - http://localhost:3001
-  - BE - http://localhost:3000
+- React based web client & API: http://localhost:3000
 - Node.js server that serves the React client and provides both OpenAPI and GraphQL endpoints.
   The full API documentation is available via swagger or GraphQL:
   - Swagger UI - http://localhost:3000/swagger
@@ -18,18 +16,16 @@ The application contains:
 
 ## Building and Running the Application
 
+Build and start local development environment with Postgres DB, MailCatcher and the app:
+
 ```bash
-# build server
-npm ci && npm run build
+docker compose --file=docker-compose.local.yml up -d
+```
 
-# build client
-npm ci --prefix client && npm run build --prefix client
+To rebuild the app and restart the containers:
 
-# build and start local development environment with Postgres DB, MailCatcher and the app
-docker-compose --file=docker-compose.local.yml up -d
-
-# add build flag to ensure that the images are rebuilt before starting the services
-docker-compose --file=docker-compose.local.yml up -d --build
+```bash
+docker compose --file=docker-compose.local.yml up -d --build --force-recreate
 ```
 
 ## Running tests by [SecTester](https://github.com/NeuraLegion/sectester-js/)
