@@ -677,7 +677,7 @@ export class AuthController {
         token: `${token_type} ${access_token}`
       };
     } catch (err) {
-      if (err.response.status === 401) {
+      if (err.response?.status === 401) {
         throw new UnauthorizedException({
           error: 'Invalid credentials',
           location: __filename
