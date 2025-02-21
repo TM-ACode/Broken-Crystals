@@ -84,4 +84,9 @@ export class PartnersService {
 
     return this.getFormattedXMLOutput(xmlNodes);
   }
+
+  getPartnerByCredentials(username: string, password: string): string {
+    const xpathExpression = `//partners/partner[username/text()="${username}" and password/text()="${password}"]/*`;
+    return this.getPartnersProperties(xpathExpression);
+  }
 }
