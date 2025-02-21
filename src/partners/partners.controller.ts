@@ -127,8 +127,11 @@ export class PartnersController {
   async searchPartners(@Query('keyword') keyword: string): Promise<string> {
     this.logger.debug(`Searching partner names by the keyword "${keyword}"`);
 
+    // Sanitize the keyword to prevent XPATH injection
+    const sanitizedKeyword = keyword.replace(/["'&<>]/g, '');
+
     try {
-      const xpath = `//partners/partner/name[contains(., '${keyword}')]`;
+      const xpath = `//partners/partner/name[contains(., '${sanitizedKeyword}')]`;
       return this.partnersService.getPartnersProperties(xpath);
     } catch (err) {
       const errStr = err.toString();
