@@ -67,10 +67,21 @@ export class PartnersService {
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
-    return `${this.XML_HEADER}\n<root>\n${xmlNodes.join('\n')}\n</root>`;
+    return `${this.XML_HEADER}
+<root>
+${xmlNodes.join('
+')}
+</root>`;
   }
 
-  getPartnersProperties(xpathExpression: string): string {
+  getPartnersProperties(xpathExpression: string, variables?: { [key: string]: string }): string {
+    if (variables) {
+      for (const [key, value] of Object.entries(variables)) {
+        const sanitizedValue = value.replace(/["'&<>]/g, '');
+        xpathExpression = xpathExpression.replace(new RegExp(`\$${key}`, 'g'), sanitizedValue);
+      }
+    }
+
     let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
 
     if (!Array.isArray(xmlNodes)) {
