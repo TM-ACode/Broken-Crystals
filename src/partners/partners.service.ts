@@ -67,7 +67,11 @@ export class PartnersService {
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
-    return `${this.XML_HEADER}\n<root>\n${xmlNodes.join('\n')}\n</root>`;
+    return `${this.XML_HEADER}
+<root>
+${xmlNodes.join('
+')}
+</root>`;
   }
 
   getPartnersProperties(xpathExpression: string): string {
@@ -86,7 +90,9 @@ export class PartnersService {
   }
 
   getPartnerByCredentials(username: string, password: string): string {
-    const xpathExpression = `//partners/partner[username/text()="${username}" and password/text()="${password}"]/*`;
+    const sanitizedUsername = username.replace(/"/g, '');
+    const sanitizedPassword = password.replace(/"/g, '');
+    const xpathExpression = `//partners/partner[username/text()="${sanitizedUsername}" and password/text()="${sanitizedPassword}"]/*`;
     return this.getPartnersProperties(xpathExpression);
   }
 }
