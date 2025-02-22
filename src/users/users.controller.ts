@@ -401,8 +401,8 @@ export class UsersController {
       return keycloakUser;
     } catch (err) {
       throw new HttpException(
-        err.response.data ?? 'Something went wrong',
-        err.response.status ?? 500
+        err.response?.data ?? err.message ?? 'Something went wrong',
+        err.response?.status ?? 500
       );
     }
   }
