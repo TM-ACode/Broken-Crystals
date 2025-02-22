@@ -19,13 +19,13 @@ The application contains:
 Build and start local development environment with Postgres DB, MailCatcher and the app:
 
 ```bash
-docker compose --file=docker-compose.local.yml up -d
+docker compose --file=compose.local.yml up -d
 ```
 
 To rebuild the app and restart the containers:
 
 ```bash
-docker compose --file=docker-compose.local.yml up -d --build --force-recreate
+docker compose --file=compose.local.yml up -d --build --force-recreate
 ```
 
 ## Running tests by [SecTester](https://github.com/NeuraLegion/sectester-js/)
