@@ -197,7 +197,8 @@ export class AuthController {
 
     res.setCookie(this.CSRF_COOKIE_HEADER, token, {
       httpOnly: true,
-      sameSite: 'strict'
+      sameSite: 'strict',
+      secure: true
     });
 
     return token;

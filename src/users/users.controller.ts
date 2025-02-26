@@ -135,10 +135,19 @@ export class UsersController {
       }
     }
   })
-  async getById(@Param('id') id: number): Promise<UserDto> {
+  @UseGuards(AuthGuard)
+  @JwtType(JwtProcessorType.RSA)
+  async getById(@Param('id') id: number, @Req() req: FastifyRequest): Promise<UserDto> {
     try {
       this.logger.debug(`Find a user by id: ${id}`);
-      return new UserDto(await this.usersService.findById(id));
+      const user = await this.usersService.findById(id);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      if (this.originEmail(req) !== user.email) {
+        throw new ForbiddenException('Access denied');
+      }
+      return new UserDto(user);
     } catch (err) {
       throw new HttpException(err.message, err.status);
     }
@@ -297,6 +306,11 @@ export class UsersController {
     let users: User[];
 
     try {
+      // Validate the query to ensure it only contains allowed characters
+      if (!/^[a-zA-Z0-9@.()=*]+$/.test(query)) {
+        throw new HttpException('Invalid characters in query', HttpStatus.BAD_REQUEST);
+      }
+
       const email = this.ldapQueryHandler.parseQuery(query);
 
       if (email && email.endsWith('*')) {
