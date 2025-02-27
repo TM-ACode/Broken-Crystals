@@ -218,7 +218,8 @@ export class AuthController {
     const token = randomBytes(32).toString('base64').substring(0, 32);
     res.setCookie(this.CSRF_COOKIE_HEADER, token, {
       httpOnly: true,
-      sameSite: 'strict'
+      sameSite: 'strict',
+      secure: true
     });
     return token;
   }

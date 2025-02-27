@@ -16,6 +16,11 @@ export class LdapQueryHandler {
   public parseQuery(query: string): string {
     this.log.debug(`query: ${query}`);
 
+    // Validate input to ensure it does not contain null bytes or other illegal characters
+    if (query.includes('\0')) {
+      throw new Error('Invalid character in query');
+    }
+
     const res = query.match(LdapQueryHandler.PARSER);
 
     if (!res || res.length != 2 || !res[1]) {
