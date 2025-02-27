@@ -1,0 +1,39 @@
+import { Severity, TestType, AttackParamLocation, HttpMethod } from '@sectester/scan';
+import { SecRunner } from '@sectester/runner';
+
+jest.setTimeout(40 * 60 * 1000); // 40 minutes
+
+let runner!: SecRunner;
+
+beforeEach(async () => {
+  runner = new SecRunner({
+    hostname: process.env.BRIGHT_HOSTNAME!
+  });
+
+  await runner.init();
+});
+
+afterEach(() => runner.clear());
+
+it('DELETE /api/email/deleteEmails', async () => {
+  await runner
+    .createScan({
+      name: expect.getState().currentTestName,
+      tests: [
+        TestType.HTTP_METHOD_FUZZING,
+        TestType.EXCESSIVE_DATA_EXPOSURE,
+        TestType.INSECURE_OUTPUT_HANDLING,
+        TestType.SERVER_SIDE_REQUEST_FORGERY,
+        TestType.SECRET_TOKENS_LEAK,
+        TestType.EXPOSED_DATABASE_DETAILS,
+        TestType.CROSS_SITE_REQUEST_FORGERY
+      ],
+      attackParamLocations: [AttackParamLocation.BODY]
+    })
+    .threshold(Severity.LOW)
+    .timeout(40 * 60 * 1000)
+    .run({
+      method: HttpMethod.DELETE,
+      url: `${process.env.BRIGHT_TARGET_URL}/api/email/deleteEmails`
+    });
+});
