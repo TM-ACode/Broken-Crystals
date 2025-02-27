@@ -121,6 +121,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate that the path is a relative path and does not contain any URL schema
+    if (/^(http|https):\/\//.test(path)) {
+      throw new BadRequestException('Invalid path parameter');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.GOOGLE,
       path
@@ -159,6 +164,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate that the path is a relative path and does not contain any URL schema
+    if (/^(http|https):\/\//.test(path)) {
+      throw new BadRequestException('Invalid path parameter');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path
@@ -288,11 +298,11 @@ export class FileController {
       if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
         await fs.promises.access(path.dirname(file), W_OK);
         await fs.promises.writeFile(file, raw);
-        return `File uploaded successfully at ${file}`;
+        return `File uploaded successfully.`;
       }
     } catch (err) {
-      this.logger.error(err.message);
-      throw err.message;
+      this.logger.error('An error occurred while uploading the file.');
+      throw new BadRequestException('Failed to upload file.');
     }
   }
 

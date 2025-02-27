@@ -85,7 +85,11 @@ export class PartnersController {
     );
 
     try {
-      const xpath = `//partners/partner[username/text()='${username}' and password/text()='${password}']/*`;
+      // Sanitize inputs to prevent XPath Injection
+      const sanitizedUsername = username.replace(/'/g, "&apos;");
+      const sanitizedPassword = password.replace(/'/g, "&apos;");
+
+      const xpath = `//partners/partner[username/text()='${sanitizedUsername}' and password/text()='${sanitizedPassword}']/*`;
       const xmlStr = this.partnersService.getPartnersProperties(xpath);
 
       // Check if account's data contains any information - If not, the login failed!
