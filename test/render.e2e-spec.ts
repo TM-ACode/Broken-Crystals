@@ -17,7 +17,10 @@ describe('/api', () => {
   describe('POST /render', () => {
     it('should not contain possibility to server-side code execution', async () => {
       await runner
-        .createScan({ tests: [TestType.SSTI], name: 'SSTI' })
+        .createScan({
+          tests: [TestType.SERVER_SIDE_TEMPLATE_INJECTION],
+          name: expect.getState().currentTestName
+        })
         .timeout(timeout)
         .run({
           method: 'POST',

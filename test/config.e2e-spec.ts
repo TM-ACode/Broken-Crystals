@@ -19,7 +19,7 @@ describe('/api', () => {
       await runner
         .createScan({
           tests: [TestType.COOKIE_SECURITY],
-          name: 'COOKIE_SECURITY'
+          name: expect.getState().currentTestName
         })
         .timeout(timeout)
         .run({
@@ -28,16 +28,16 @@ describe('/api', () => {
         });
     });
 
-    it('should contain proper Security Headers configuration', async () => {
+    it('should not contain secret tokens leak', async () => {
       await runner
         .createScan({
-          tests: [TestType.HEADER_SECURITY],
-          name: 'HEADER_SECURITY'
+          tests: [TestType.SECRET_TOKENS_LEAK],
+          name: expect.getState().currentTestName
         })
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}/api/config?query=no-sec-headers`
+          url: `${process.env.SEC_TESTER_TARGET}/api/config`
         });
     });
 
@@ -45,7 +45,7 @@ describe('/api', () => {
       await runner
         .createScan({
           tests: [TestType.FULL_PATH_DISCLOSURE],
-          name: 'FULL_PATH_DISCLOSURE'
+          name: expect.getState().currentTestName
         })
         .timeout(timeout)
         .run({
