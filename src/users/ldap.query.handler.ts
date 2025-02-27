@@ -21,6 +21,11 @@ export class LdapQueryHandler {
       throw new Error('Invalid character in query');
     }
 
+    // Additional validation to reject any special LDAP characters
+    if (/[*()\\]/.test(query)) {
+      throw new Error('Query contains invalid LDAP characters');
+    }
+
     const res = query.match(LdapQueryHandler.PARSER);
 
     if (!res || res.length != 2 || !res[1]) {
