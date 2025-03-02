@@ -267,7 +267,12 @@ export class FileController {
     description: 'File deleted successfully'
   })
   async deleteFile(@Query('path') path: string): Promise<void> {
-    await this.fileService.deleteFile(path);
+    try {
+      await this.fileService.deleteFile(path);
+    } catch (err) {
+      this.logger.error('Error deleting file', err.stack);
+      throw new BadRequestException('Failed to delete the file.');
+    }
   }
 
   @Put('raw')

@@ -89,7 +89,7 @@ export class TestimonialsController {
   @ApiQuery({
     name: 'query',
     example: 'select count(*) as count from testimonial',
-    required: true
+    required: false
   })
   @Header('content-type', 'text/html')
   @ApiOperation({
@@ -98,8 +98,8 @@ export class TestimonialsController {
   @ApiOkResponse({
     type: String
   })
-  async getCount(@Query('query') query: string): Promise<number> {
+  async getCount(): Promise<number> {
     this.logger.debug('Get count of testimonials.');
-    return await this.testimonialsService.count(query);
+    return await this.testimonialsService.count();
   }
 }
