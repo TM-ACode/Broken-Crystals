@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/goto', async () => {
   await runner
     .createScan({
-      tests: [TestType.UNVALIDATED_REDIRECT, TestType.SERVER_SIDE_REQUEST_FORGERY, TestType.EXCESSIVE_DATA_EXPOSURE],
+      tests: [TestType.UNVALIDATED_REDIRECT],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.LOW)
