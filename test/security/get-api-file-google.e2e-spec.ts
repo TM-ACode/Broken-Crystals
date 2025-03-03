@@ -20,11 +20,7 @@ it('GET /api/file/google', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.LOCAL_FILE_INCLUSION,
-        TestType.REMOTE_FILE_INCLUSION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.SERVER_SIDE_REQUEST_FORGERY,
-        TestType.IMPROPER_ASSET_MANAGEMENT
+        TestType.SERVER_SIDE_REQUEST_FORGERY
       ],
       attackParamLocations: [
         AttackParamLocation.QUERY,

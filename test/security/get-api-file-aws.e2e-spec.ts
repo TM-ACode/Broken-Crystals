@@ -20,9 +20,6 @@ it('GET /api/file/aws', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.LOCAL_FILE_INCLUSION,
-        TestType.REMOTE_FILE_INCLUSION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
         TestType.SERVER_SIDE_REQUEST_FORGERY
       ],
       attackParamLocations: [

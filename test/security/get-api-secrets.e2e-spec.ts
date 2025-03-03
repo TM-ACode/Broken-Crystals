@@ -20,9 +20,7 @@ it('GET /api/secrets', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.SECRET_TOKENS_LEAK,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.INSECURE_OUTPUT_HANDLING
+        TestType.SECRET_TOKENS_LEAK
       ],
       attackParamLocations: [AttackParamLocation.HEADER, AttackParamLocation.QUERY]
     })

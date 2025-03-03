@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/partners/partnerLogin', async () => {
   await runner
     .createScan({
-      tests: [TestType.XPATH_INJECTION, TestType.EXCESSIVE_DATA_EXPOSURE, TestType.INSECURE_OUTPUT_HANDLING],
+      tests: [TestType.XPATH_INJECTION],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.LOW)

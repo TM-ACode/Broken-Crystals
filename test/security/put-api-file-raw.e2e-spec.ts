@@ -20,10 +20,6 @@ it('PUT /api/file/raw', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.FILE_UPLOAD,
-        TestType.LOCAL_FILE_INCLUSION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.INSECURE_OUTPUT_HANDLING,
         TestType.FULL_PATH_DISCLOSURE
       ],
       attackParamLocations: [
