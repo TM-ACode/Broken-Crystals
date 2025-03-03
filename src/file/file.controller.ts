@@ -67,6 +67,15 @@ export class FileController {
     return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
   }
 
+  private isValidAwsPath(path: string): boolean {
+    // Define a whitelist of allowed paths for AWS
+    const allowedPaths = [
+      '/latest/meta-data/',
+      '/latest/user-data/'
+    ];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+  }
+
   @Get()
   @ApiQuery({
     name: 'path',
@@ -168,6 +177,10 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidAwsPath(path)) {
+      throw new BadRequestException(`Invalid path: ${path}`);
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path
