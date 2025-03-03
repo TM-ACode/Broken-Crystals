@@ -85,7 +85,11 @@ export class PartnersController {
     );
 
     try {
-      const xpath = `//partners/partner[username/text()='${username}' and password/text()='${password}']/*`;
+      // Escape single quotes in username and password to prevent XPath injection
+      const safeUsername = username.replace(/'/g, "''");
+      const safePassword = password.replace(/'/g, "''");
+
+      const xpath = `//partners/partner[username/text()='${safeUsername}' and password/text()='${safePassword}']/*`;
       const xmlStr = this.partnersService.getPartnersProperties(xpath);
 
       // Check if account's data contains any information - If not, the login failed!

@@ -288,11 +288,11 @@ export class FileController {
       if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
         await fs.promises.access(path.dirname(file), W_OK);
         await fs.promises.writeFile(file, raw);
-        return `File uploaded successfully at ${file}`;
+        return `File uploaded successfully.`;
       }
     } catch (err) {
       this.logger.error(err.message);
-      throw err.message;
+      throw new BadRequestException('Failed to upload file.');
     }
   }
 
