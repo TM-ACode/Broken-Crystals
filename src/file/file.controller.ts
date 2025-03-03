@@ -58,6 +58,15 @@ export class FileController {
     return file;
   }
 
+  private isValidAzurePath(path: string): boolean {
+    // Define a whitelist of allowed paths for Azure
+    const allowedPaths = [
+      '/metadata/instance/compute',
+      '/metadata/instance/network'
+    ];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+  }
+
   @Get()
   @ApiQuery({
     name: 'path',
@@ -197,6 +206,10 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidAzurePath(path)) {
+      throw new BadRequestException(`Invalid path: ${path}`);
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
