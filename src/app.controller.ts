@@ -169,7 +169,10 @@ export class AppController {
   getConfig(): AppConfig {
     this.logger.debug('Called getConfig');
     const config = this.appService.getConfig();
-    return config;
+    return {
+      ...config,
+      sql: 'Sensitive information hidden',
+    };
   }
 
   @Get('/secrets')

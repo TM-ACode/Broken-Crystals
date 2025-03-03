@@ -291,7 +291,7 @@ export class FileController {
         return `File uploaded successfully.`;
       }
     } catch (err) {
-      this.logger.error(err.message);
+      this.logger.error('An error occurred while uploading the file.');
       throw new Error('An error occurred while uploading the file.');
     }
   }
