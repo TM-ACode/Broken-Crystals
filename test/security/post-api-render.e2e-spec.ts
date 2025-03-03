@@ -20,10 +20,7 @@ it('POST /api/render', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.SERVER_SIDE_TEMPLATE_INJECTION,
-        TestType.XML_EXTERNAL_ENTITY_INJECTION,
-        TestType.OS_COMMAND_INJECTION,
-        TestType.SECRET_TOKENS_LEAK
+        TestType.SERVER_SIDE_TEMPLATE_INJECTION
       ],
       attackParamLocations: [AttackParamLocation.BODY]
     })

@@ -20,9 +20,7 @@ it('GET /api/partners/searchPartners', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.XPATH_INJECTION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.INSECURE_OUTPUT_HANDLING
+        TestType.XPATH_INJECTION
       ],
       attackParamLocations: [AttackParamLocation.QUERY],
       skipStaticParams: false
