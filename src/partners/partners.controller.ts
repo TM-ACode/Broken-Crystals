@@ -85,12 +85,12 @@ export class PartnersController {
     );
 
     try {
-      // Sanitize inputs to prevent XPath Injection
-      const sanitizedUsername = username.replace(/'/g, "\'");
-      const sanitizedPassword = password.replace(/'/g, "\'");
-
-      const xpath = `//partners/partner[username/text()='${sanitizedUsername}' and password/text()='${sanitizedPassword}']/*`;
-      const xmlStr = this.partnersService.getPartnersProperties(xpath);
+      // Use parameterized XPath query to prevent injection
+      const xpath = `//partners/partner[username/text()=$username and password/text()=$password]/*`;
+      const xmlStr = this.partnersService.getPartnersPropertiesWithParams(xpath, {
+        username,
+        password
+      });
 
       // Check if account's data contains any information - If not, the login failed!
       if (
@@ -133,7 +133,7 @@ export class PartnersController {
 
     try {
       // Sanitize the keyword to prevent XPath Injection
-      const sanitizedKeyword = keyword.replace(/'/g, "\'");
+      const sanitizedKeyword = keyword.replace(/["'&<>]/g, '');
       const xpath = `//partners/partner/name[contains(., '${sanitizedKeyword}')]`;
       return this.partnersService.getPartnersProperties(xpath);
     } catch (err) {
