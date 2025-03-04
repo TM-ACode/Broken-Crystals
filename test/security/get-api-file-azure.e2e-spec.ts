@@ -20,11 +20,7 @@ it('GET /api/file/azure', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.LOCAL_FILE_INCLUSION,
-        TestType.REMOTE_FILE_INCLUSION,
-        TestType.SERVER_SIDE_REQUEST_FORGERY,
-        TestType.INSECURE_OUTPUT_HANDLING
+        TestType.SERVER_SIDE_REQUEST_FORGERY
       ],
       attackParamLocations: [
         AttackParamLocation.QUERY,

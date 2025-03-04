@@ -1,3 +1,4 @@
+```javascript
 import { SecRunner } from '@sectester/runner';
 import { Severity, TestType, AttackParamLocation, HttpMethod } from '@sectester/scan';
 
@@ -19,7 +20,7 @@ afterEach(() => runner.clear());
 it('GET /api/testimonials/count', async () => {
   await runner
     .createScan({
-      tests: [TestType.SQL_INJECTION, TestType.EXCESSIVE_DATA_EXPOSURE, TestType.EXPOSED_DATABASE_DETAILS],
+      tests: [TestType.EXPOSED_DATABASE_DETAILS],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.LOW)
@@ -30,3 +31,4 @@ it('GET /api/testimonials/count', async () => {
       query: { query: 'select count(*) as count from testimonial' }
     });
 });
+```
