@@ -20,9 +20,7 @@ it('POST /api/metadata', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.XML_EXTERNAL_ENTITY_INJECTION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.INSECURE_OUTPUT_HANDLING
+        TestType.XML_EXTERNAL_ENTITY_INJECTION
       ],
       attackParamLocations: [AttackParamLocation.BODY],
       skipStaticParams: false

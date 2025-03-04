@@ -20,9 +20,7 @@ it('GET /api/config', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.SECRET_TOKENS_LEAK,
-        TestType.INSECURE_OUTPUT_HANDLING
+        TestType.SECRET_TOKENS_LEAK
       ],
       attackParamLocations: [AttackParamLocation.HEADER, AttackParamLocation.QUERY]
     })

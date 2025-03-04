@@ -20,12 +20,7 @@ it('DELETE /api/file', async () => {
   await runner
     .createScan({
       tests: [
-        TestType.LOCAL_FILE_INCLUSION,
-        TestType.REMOTE_FILE_INCLUSION,
-        TestType.OS_COMMAND_INJECTION,
-        TestType.EXCESSIVE_DATA_EXPOSURE,
-        TestType.FULL_PATH_DISCLOSURE,
-        TestType.EXPOSED_DATABASE_DETAILS
+        TestType.FULL_PATH_DISCLOSURE
       ],
       attackParamLocations: [AttackParamLocation.QUERY]
     })

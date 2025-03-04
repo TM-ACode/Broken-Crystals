@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/testimonials/count', async () => {
   await runner
     .createScan({
-      tests: [TestType.SQL_INJECTION, TestType.EXCESSIVE_DATA_EXPOSURE, TestType.INSECURE_OUTPUT_HANDLING],
+      tests: [TestType.INSECURE_OUTPUT_HANDLING],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.LOW)

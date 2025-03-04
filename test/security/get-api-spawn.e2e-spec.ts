@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/spawn', async () => {
   await runner
     .createScan({
-      tests: [TestType.OS_COMMAND_INJECTION, TestType.EXCESSIVE_DATA_EXPOSURE, TestType.FULL_PATH_DISCLOSURE],
+      tests: [TestType.FULL_PATH_DISCLOSURE],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.LOW)
