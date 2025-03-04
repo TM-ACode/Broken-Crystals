@@ -163,7 +163,18 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
-    if (!path.startsWith(CloudProvidersMetaData.AWS)) {
+    // Validate the path against a whitelist of allowed paths
+    const allowedPaths = [
+      'ami-id',
+      'instance-id',
+      'instance-type',
+      'local-ipv4',
+      'public-ipv4'
+    ];
+
+    const isValidPath = allowedPaths.some(allowedPath => path.endsWith(allowedPath));
+
+    if (!isValidPath) {
       throw new BadRequestException('Invalid path parameter');
     }
 
