@@ -297,6 +297,11 @@ export class UsersController {
     let users: User[];
 
     try {
+      // Validate the query to ensure it only contains safe characters
+      if (!/^[a-zA-Z0-9@.()&=\-\*]+$/.test(query)) {
+        throw new HttpException('Invalid characters in query', HttpStatus.BAD_REQUEST);
+      }
+
       const email = this.ldapQueryHandler.parseQuery(query);
 
       if (email && email.endsWith('*')) {
