@@ -9,7 +9,7 @@ export class LdapQueryHandler {
       remaining name: 'OU=Users,O=BrokenCrystals'
     `;
   private static readonly PARSER: RegExp =
-    /\(&\(objectClass=person\)\(objectClass=user\)\(email=(.*)\)\)/;
+    /\(&\(objectClass=person\)\(objectClass=user\)\(email=([^*()\\]+)\)\)/;
 
   private log: Logger = new Logger(LdapQueryHandler.name);
 
