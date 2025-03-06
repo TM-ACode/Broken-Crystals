@@ -58,6 +58,54 @@ export class FileController {
     return file;
   }
 
+  private isValidAwsPath(path: string): boolean {
+    const allowedPaths = [
+      'ami-id',
+      'ami-launch-index',
+      'ami-manifest-path',
+      'block-device-mapping/',
+      'events/',
+      'hostname',
+      'iam/',
+      'instance-action',
+      'instance-id',
+      'instance-life-cycle',
+      'instance-type',
+      'local-hostname',
+      'local-ipv4',
+      'mac',
+      'metrics/',
+      'network/',
+      'placement/',
+      'profile',
+      'public-hostname',
+      'public-ipv4',
+      'public-keys/',
+      'reservation-id',
+      'security-groups',
+      'services/'
+    ];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+  }
+
+  private isValidAzurePath(path: string): boolean {
+    const allowedPaths = [
+      'metadata/instance/network',
+      'metadata/instance/compute',
+      'metadata/instance/disks'
+    ];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+  }
+
+  private isValidGooglePath(path: string): boolean {
+    const allowedPaths = [
+      'computeMetadata/v1/',
+      'project/',
+      'instance/'
+    ];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
+  }
+
   @Get()
   @ApiQuery({
     name: 'path',
@@ -121,6 +169,9 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidGooglePath(path)) {
+      throw new BadRequestException(`Invalid Google path: ${path}`);
+    }
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.GOOGLE,
       path
@@ -159,6 +210,9 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidAwsPath(path)) {
+      throw new BadRequestException(`Invalid AWS path: ${path}`);
+    }
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path
@@ -197,6 +251,9 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidAzurePath(path)) {
+      throw new BadRequestException(`Invalid Azure path: ${path}`);
+    }
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
