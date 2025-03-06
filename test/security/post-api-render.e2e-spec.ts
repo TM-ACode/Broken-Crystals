@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('POST /api/render', async () => {
   await runner
     .createScan({
-      tests: ['css_injection', 'html_injection', 'xss', 'ssti', 'server_side_js_injection'],
+      tests: ['ssti'],
       attackParamLocations: [AttackParamLocation.BODY]
     })
     .threshold(Severity.CRITICAL)

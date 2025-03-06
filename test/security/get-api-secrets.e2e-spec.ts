@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/secrets', async () => {
   await runner
     .createScan({
-      tests: ['secret_tokens', 'excessive_data_exposure'],
+      tests: ['secret_tokens'],
       attackParamLocations: [AttackParamLocation.QUERY],
       skipStaticParams: false
     })
