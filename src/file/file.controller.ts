@@ -121,6 +121,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate that the path is a relative path and does not contain any URL schema
+    if (/^(http|https):\/\//.test(path)) {
+      throw new BadRequestException('Invalid path parameter');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.GOOGLE,
       path
@@ -159,6 +164,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate that the path is a relative path and does not contain any URL schema
+    if (/^(http|https):\/\//.test(path)) {
+      throw new BadRequestException('Invalid path parameter');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path
@@ -197,6 +207,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate that the path is a relative path and does not contain any URL schema
+    if (/^(http|https):\/\//.test(path)) {
+      throw new BadRequestException('Invalid path parameter');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
