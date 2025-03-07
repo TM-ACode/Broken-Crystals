@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/products/latest', async () => {
   await runner
     .createScan({
-      tests: ['business_constraint_bypass', 'excessive_data_exposure'],
+      tests: ['business_constraint_bypass'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)

@@ -1,3 +1,4 @@
+```
 import { SecRunner } from '@sectester/runner';
 import { Severity, AttackParamLocation, HttpMethod } from '@sectester/scan';
 
@@ -31,3 +32,5 @@ it('GET /api/partners/searchPartners', async () => {
       query: { keyword: 'Walter' }
     });
 });
+
+```

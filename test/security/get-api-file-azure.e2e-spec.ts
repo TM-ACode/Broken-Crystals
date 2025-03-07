@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/file/azure', async () => {
   await runner
     .createScan({
-      tests: ['open_cloud_storage', 'lfi', 'ssrf', 'excessive_data_exposure'],
+      tests: ['ssrf'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)

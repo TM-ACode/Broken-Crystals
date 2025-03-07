@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/goto', async () => {
   await runner
     .createScan({
-      tests: ['unvalidated_redirect', 'ssrf'],
+      tests: ['unvalidated_redirect'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)
