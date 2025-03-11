@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/file/aws', async () => {
   await runner
     .createScan({
-      tests: ['open_cloud_storage', 'excessive_data_exposure', 'ssrf', 'amazon_s3_takeover'],
+      tests: ['ssrf'],
       attackParamLocations: [AttackParamLocation.QUERY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)

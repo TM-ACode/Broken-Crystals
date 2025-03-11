@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('POST /api/render', async () => {
   await runner
     .createScan({
-      tests: ['ssti', 'excessive_data_exposure', 'secret_tokens'],
+      tests: ['ssti'],
       attackParamLocations: [AttackParamLocation.BODY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)

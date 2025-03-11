@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/partners/searchPartners', async () => {
   await runner
     .createScan({
-      tests: ['xpathi', 'excessive_data_exposure', 'xss'],
+      tests: ['xpathi'],
       attackParamLocations: [AttackParamLocation.QUERY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)

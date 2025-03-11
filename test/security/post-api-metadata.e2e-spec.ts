@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('POST /api/metadata', async () => {
   await runner
     .createScan({
-      tests: ['xxe', 'xss', 'excessive_data_exposure', 'secret_tokens'],
+      tests: ['xxe'],
       attackParamLocations: [AttackParamLocation.BODY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)

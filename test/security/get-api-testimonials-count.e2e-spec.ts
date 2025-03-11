@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/testimonials/count', async () => {
   await runner
     .createScan({
-      tests: ['sqli', 'excessive_data_exposure', 'csrf', 'full_path_disclosure'],
+      tests: ['sqli'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)

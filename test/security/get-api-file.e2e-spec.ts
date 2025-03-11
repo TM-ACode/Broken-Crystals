@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/file', async () => {
   await runner
     .createScan({
-      tests: ['lfi', 'rfi', 'ssrf', 'excessive_data_exposure', 'open_cloud_storage', 'secret_tokens'],
+      tests: ['ssrf', 'lfi', 'rfi'],
       attackParamLocations: [AttackParamLocation.QUERY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)

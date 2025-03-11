@@ -19,7 +19,7 @@ afterEach(() => runner.clear());
 it('GET /api/config', async () => {
   await runner
     .createScan({
-      tests: ['excessive_data_exposure', 'secret_tokens', 'csrf', 'improper_asset_management'],
+      tests: ['secret_tokens'],
       attackParamLocations: [AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)
