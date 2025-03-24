@@ -50,7 +50,7 @@ services:
       test:
         [
           'CMD-SHELL',
-          "exec 3<>/dev/tcp/127.0.0.1/9000;echo -e \"GET /health/ready HTTP/1.1\r\nhost: 127.0.0.1:9000\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"
+          "exec 3<>/dev/tcp/keycloak/9000;echo -e \"GET /health/ready HTTP/1.1\r\nhost: keycloak:9000\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"
         ]
       timeout: 10s
       interval: 30s
@@ -67,8 +67,7 @@ services:
     healthcheck:
       interval: 5s
       retries: 10
-      test:
-        ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1:3000/api/config']
+      test: ['CMD', 'wget', '--spider', '-q', 'http://nodejs:3000/api/config']
       timeout: 30s
     environment:
       URL: http://localhost:3000
@@ -88,7 +87,7 @@ services:
     healthcheck:
       interval: 10s
       retries: 10
-      test: ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1:1080']
+      test: ['CMD', 'wget', '--spider', '-q', 'http://mailcatcher:1080']
       timeout: 45s
     restart: always
     ports:
