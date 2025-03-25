@@ -1,5 +1,4 @@
 import { SecRunner } from '@sectester/runner';
-import { TestType } from '@sectester/scan';
 
 describe('/api', () => {
   const timeout = 600000;
@@ -18,7 +17,7 @@ describe('/api', () => {
     it('should use and implement cookies with secure attributes', async () => {
       await runner
         .createScan({
-          tests: [TestType.COOKIE_SECURITY],
+          tests: ['cookie_security'],
           name: expect.getState().currentTestName
         })
         .timeout(timeout)
@@ -31,20 +30,20 @@ describe('/api', () => {
     it('should not contain secret tokens leak', async () => {
       await runner
         .createScan({
-          tests: [TestType.SECRET_TOKENS_LEAK],
+          tests: ['secret_tokens'],
           name: expect.getState().currentTestName
         })
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}/api/config`
+          url: `${process.env.SEC_TESTER_TARGET}/api/config?query=no-sec-headers`
         });
     });
 
     it('should not contain errors that include full webroot path', async () => {
       await runner
         .createScan({
-          tests: [TestType.FULL_PATH_DISCLOSURE],
+          tests: ['full_path_disclosure'],
           name: expect.getState().currentTestName
         })
         .timeout(timeout)

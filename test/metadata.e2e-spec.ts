@@ -1,5 +1,4 @@
 import { SecRunner } from '@sectester/runner';
-import { TestType } from '@sectester/scan';
 
 describe('/api', () => {
   const timeout = 600000;
@@ -18,7 +17,7 @@ describe('/api', () => {
     it('should not inject external entities into XML', async () => {
       await runner
         .createScan({
-          tests: [TestType.XML_EXTERNAL_ENTITY_INJECTION],
+          tests: ['xxe'],
           name: expect.getState().currentTestName
         })
         .timeout(timeout)

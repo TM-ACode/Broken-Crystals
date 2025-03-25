@@ -1,5 +1,4 @@
 import { SecRunner } from '@sectester/runner';
-import { TestType } from '@sectester/scan';
 
 describe('/api', () => {
   const timeout = 600000;
@@ -18,7 +17,7 @@ describe('/api', () => {
     it('should not contain possibility to server-side code execution', async () => {
       await runner
         .createScan({
-          tests: [TestType.SERVER_SIDE_TEMPLATE_INJECTION],
+          tests: ['ssti'],
           name: expect.getState().currentTestName
         })
         .timeout(timeout)

@@ -1,5 +1,4 @@
 import { SecRunner } from '@sectester/runner';
-import { TestType } from '@sectester/scan';
 import axios from 'axios';
 
 const generateToken = async (jwtType) => {
@@ -32,10 +31,7 @@ describe('/api', () => {
       const jwtType = 'kid-sql';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
@@ -48,10 +44,7 @@ describe('/api', () => {
       const jwtType = 'weak-key';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
@@ -64,10 +57,7 @@ describe('/api', () => {
       const jwtType = 'jku';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
@@ -80,10 +70,7 @@ describe('/api', () => {
       const jwtType = 'jwk';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
@@ -96,10 +83,7 @@ describe('/api', () => {
       const jwtType = 'x5c';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
@@ -112,10 +96,7 @@ describe('/api', () => {
       const jwtType = 'x5u';
       const token = await generateToken(jwtType);
       await runner
-        .createScan({
-          tests: [TestType.BROKEN_JWT_AUTHENTICATION],
-          name: `JWT ${jwtType}`
-        })
+        .createScan({ tests: ['jwt'], name: `JWT ${jwtType}` })
         .timeout(timeout)
         .run({
           method: 'GET',
