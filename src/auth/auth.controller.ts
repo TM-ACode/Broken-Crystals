@@ -720,7 +720,7 @@ export class AuthController {
     const token = await this.authService.createToken(
       {
         user: user.email,
-        exp: 90 + Math.floor(Date.now() / 1000)
+        exp: 3600 + Math.floor(Date.now() / 1000) // Auth token expires in 1 hour
       },
       JwtProcessorType.RSA
     );
