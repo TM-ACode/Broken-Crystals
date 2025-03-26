@@ -25,7 +25,7 @@ services:
     healthcheck:
       interval: 10s
       retries: 10
-      test: ['CMD-SHELL', 'pg_isready -d keycloak -U $${POSTGRES_USER}']
+      test: ['CMD-SHELL', 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}']
       timeout: 45s
     restart: on-failure
 
