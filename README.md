@@ -80,34 +80,87 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Cross-Site Scripting (XSS)** -
 
-  - **Reflective XSS** Open the landing page with the _dummy_ query param that contains DOM content (including script), add the provided DOM will be injected into the page and script executed.
+  - **Reflective XSS** There are couple of endpoints that are vulnerable to reflective XSS:
+
+    - Landing page with the _dummy_ query param that contains DOM content (including script), add the provided DOM will be injected into the page and script executed.
+    - Landing page maptitle param that contains DOM content (including script), add the provided DOM will be injected into the page and script executed.
+    - /api/testimonials/count page count param is vulnerable to reflective XSS.
+    - POST to https://brokencrystals.com/api/metadata with body XML body vulnarable for reflective XSS.
+    - POST to https://brokencrystals.com/api/metadata with body SVG body vulnarable for reflective XSS.
+
+    <details>
+      <summary>Reflective XSS Example Exploitation</summary>
+
+    To demonstrate reflective XSS, you can use the following payloads:
+
+    1. **Landing Page Dummy Query Parameter**:
+
+       - URL: `https://brokencrystals.com/?__dummy=__<script>alert('XSS')</script>`
+       - The `dummy` query parameter is directly injected into the DOM without sanitization, causing the script to execute.
+
+    2. **Landing Page Map Title Parameter**:
+
+       - URL: `https://brokencrystals.com/?maptitle=<script>alert('XSS')</script>`
+       - The `maptitle` parameter is used in the DOM and allows script execution.
+
+    3. **Testimonials Page Count Parameter**:
+       - URL: `https://brokencrystals.com/api/testimonials/count?query=<script>alert('XSS')</script>`
+       - The `query` parameter is reflected in the response without sanitization, allowing script execution.
+    4. **POST to /api/metadata with XML Body**:
+       - URL: `https://brokencrystals.com/api/metadata`
+       - Body: `<?xml version="1.0" encoding="UTF-8"?><x:script xmlns:x="http://www.w3.org/1999/xhtml">prompt("bright986352")</x:script><child></child>`
+       - The XML body is processed and the script is executed in the response.
+    5. **POST to /api/metadata with SVG Body**:
+       - URL: `https://brokencrystals.com/api/metadata`
+       - Body: `<svg xmlns="http://www.w3.org2000/svg" xmlns:xlink="http://www.w3.org1999/xlink" viewBox="0 0 915 585"><g<x:script xmlns:x="http://www.w3.org/1999/xhtml">prompt("bright443188")</`
+
+    </details>
 
   - **Persistent XSS** can be demonstrated using add testimonial form on the landing page (for authenticated users only).
+
+    <details>
+      <summary>Persistent XSS Example Exploitation</summary>
+
+    To demonstrate persistent XSS, you can use the following steps:
+
+    1. Submit the following `curl` request to store the XSS payload:
+
+
+        ```bash
+        curl 'https://brokencrystals.com/api/testimonials' -X POST \
+        -H 'authorization: AUTH_TOKEN' \
+        -H 'Content-Type: application/json' \
+        --data-raw '{"name":"Test User","title":"Test Title","message":"<script>alert(12345)</script>"}'
+        ```
+
+    2. Visit the testimonials page at `https://brokencrystals.com/marketplace` to observe the execution of the XSS payload.
+
+    </details>
+
+  - **DOM Cross-Site Scripting** - can be demonstrated by using the mailing list subscription form on the landing page. The form sends a POST request to `/api/subscriptions?email=VALUE`, and the server's response is embedded into the page without any validation on either the server or client side. This allows an attacker to inject malicious scripts into the page.
+    <details>
+      <summary>Example Exploitation</summary>
+
+    To demonstrate this vulnerability, you can submit the following payload in the email field of the subscription form:
+
+    ```html
+    <script>
+      alert('XSS');
+    </script>
+    ```
+
+    Brobser perform a POST request to `/api/subscriptions?email=<script>alert("XSS")</script>'` with the payload in the email field.
+    The server's response will include the injected script, which will be embedded into the page and executed by the browser. This can be used to execute arbitrary JavaScript code in the context of the user's session.
+
+    Example:
+    ![Example of DOM XSS Exploitation](docs/bc_dom_xss.gif)
+
+    </details>
 
 - **Default Login Location** - The login endpoint is available under /api/auth/login.
 
 - **Directory Listing** - The Nginx config file under the nginx-conf directory is configured to allow directory listing.
 
-- **DOM Cross-Site Scripting** - can be demonstrated by using the mailing list subscription form on the landing page.
-  - **Mailing List Subscription XSS** - The mailing list subscription form is vulnerable to reflective XSS. The form sends a POST request to `/api/subscriptions?email=VALUE`, and the server's response is embedded into the page without any validation on either the server or client side. This allows an attacker to inject malicious scripts into the DOM.
-
-    <details>
-      <summary>Example Exploitation</summary>
-
-      To demonstrate this vulnerability, you can submit the following payload in the email field of the subscription form:
-
-      ```html
-      <script>alert('XSS')</script>
-      ```
-      Brobser perform a POST request to `/api/subscriptions?email=<script>alert("XSS")</script>'` with the payload in the email field.
-      The server's response will include the injected script, which will be embedded into the page and executed by the browser. This can be used to execute arbitrary JavaScript code in the context of the user's session.
-
-      Example:
-      ![Example of DOM XSS Exploitation](docs/bc_dom_xss.gif)
-
-    </details>
-
-    ![Demonstration of Mailing List Subscription XSS](placeholder-for-gif.gif)
 - **File Upload** - The application allows uploading an avatar photo of the authenticated user. The server doesn't perform any sort of validation on the uploaded file.
   <details>
     <summary>Example of No Anti-Virus Protection</summary>
