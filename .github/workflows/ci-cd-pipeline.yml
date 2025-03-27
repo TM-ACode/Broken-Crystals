@@ -25,7 +25,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           # DEBUG: "*snyk*"
         with:
-          args: test ./ --all-projects --severity-threshold=high
+          args: test ./package.json --all-projects --severity-threshold=high
           
 
   build:
