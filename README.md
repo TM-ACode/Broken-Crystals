@@ -125,13 +125,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
     1. Submit the following `curl` request to store the XSS payload:
 
-
-        ```bash
-        curl 'https://brokencrystals.com/api/testimonials' -X POST \
-        -H 'authorization: AUTH_TOKEN' \
-        -H 'Content-Type: application/json' \
-        --data-raw '{"name":"Test User","title":"Test Title","message":"<script>alert(12345)</script>"}'
-        ```
+       ```bash
+       curl 'https://brokencrystals.com/api/testimonials' -X POST \
+       -H 'authorization: AUTH_TOKEN' \
+       -H 'Content-Type: application/json' \
+       --data-raw '{"name":"Test User","title":"Test Title","message":"<script>alert(12345)</script>"}'
+       ```
 
     2. Visit the testimonials page at `https://brokencrystals.com/marketplace` to observe the execution of the XSS payload.
 
@@ -184,7 +183,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
   Successfully fetching the file shows that the server stored the file:
 
   ```bash
-  $ curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJleHAiOjE3NDI5NzkyOTJ9.NBfrHS7ydCltPBKDWuKbXvKJq901Q1cJHjyf3jhElJVAijuxNxOMCib-luiijXHHidIcgaHQrHF0ofcwBdaoZNfR244YEI0DalmruMd2xjumUJNy8jiofGgF0n-nwxp-CDdjN-xxV81oy7pscmHfYO07OyUWr1rqvPZYDejC1TGP8j1vlDeWkEB0gsE9NRb38DDwdkcjsy1UpLcidppVexUgCP60blghDTKYBEUFmfbFWNScN1BNSDvIhTIgXPX_GKuRueLayY15YtjCKRjqzjpTrTi80d5mf9nzoVIbo2RyjGRCg8LX7M1Zi7XRAhuZHV2JIMGqhXvWeFyN_BfQbxniZEcbP2SRUFhJChuZrf4JQeyhOQo_iPZb6xwJzHTY_Gd96jgGaMXgQLY933vI9s5Rc9TlpsVzPatESVK6ve1comR1k9xCeozEwpNY79kYjDIdFiUp8An0MSBYUbC-SvQWijB8wStogMyovWzJP83Lrpd77Oi5ZxK8onKBHMt8tKUkCZmFs8kAQLhkqq9QNiQVAhvnTJaIppy0kq0R-fBDeGWeMv3JLZbJUYea_mVmj3VhhlQ4PIJAhTTTTKTroKakfiCuDnzjIh3_voT2nrudCAP3tWsDgJRL6ViJNue4Xld2y2ASoMfgO52IAlr39Paxekq5nW-LHuZhsMxAMjY'
+  $ curl -i 'https://qa.brokencrystals.com/api/users/one/admin/photo' -H 'authorization: AITH_TOKEN'
   HTTP/2 200
   date: Wed, 26 Mar 2025 08:18:40 GMT
   content-type: application/octet-stream
