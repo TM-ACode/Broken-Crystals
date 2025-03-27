@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set Up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: "18"
 
@@ -24,14 +24,14 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: test --severity-threshold=high
+          args: test --all-projects --severity-threshold=high
 
   build:
     runs-on: ubuntu-latest
     needs: sast
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
         run: |
@@ -39,22 +39,22 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t your-dockerhub-username/brokencrystals:latest .
-          docker push your-dockerhub-username/brokencrystals:latest
+          docker build -t ${{secrets.DOCKERHUB_USERNAME}}/brokencrystals:latest .
+          docker push ${{secrets.DOCKERHUB_USERNAME}}/brokencrystals:latest
 
   snyk_scan:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Snyk Scan Docker Image
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: your-dockerhub-username/brokencrystals:latest
+          image: ${{secrets.DOCKERHUB_USERNAME}}/brokencrystals:latest
           args: --severity-threshold=high --fail-on=vulnerabilities
 
   trivy_scan:
@@ -62,7 +62,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Trivy
         run: |
@@ -74,4 +74,4 @@ jobs:
 
       - name: Scan Docker Image with Trivy
         run: |
-          trivy image --exit-code 1 --severity HIGH,CRITICAL your-dockerhub-username/brokencrystals:latest
+          trivy image --exit-code 1 --severity HIGH,CRITICAL "${{secrets.DOCKERHUB_USERNAME}}"/brokencrystals:latest
