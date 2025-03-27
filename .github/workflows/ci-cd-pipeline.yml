@@ -16,9 +16,6 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Upgrade Vulnerable Dependencies
         run: |
           npm install @fastify/multipart@8.3.1
