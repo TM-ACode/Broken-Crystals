@@ -23,8 +23,10 @@ jobs:
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          DEBUG: "*snyk*"
         with:
-          args: test ./ --severity-threshold=high
+          args: test ./ --all-projects --severity-threshold=high
+          
 
   build:
     runs-on: ubuntu-latest
