@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set Up Node.js
         uses: actions/setup-node@v4
@@ -55,8 +55,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: your-dockerhub-username/brokencrystals:latest
-          args: --severity-threshold=high
-          fail-on: all
+          args: --severity-threshold=high --fail-on=vulnerabilities
 
   trivy_scan:
     runs-on: ubuntu-latest
