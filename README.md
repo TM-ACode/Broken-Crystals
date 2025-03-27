@@ -80,15 +80,34 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Cross-Site Scripting (XSS)** -
 
-  - **Reflective XSS** can be demonstrated by using the mailing list subscription form on the landing page.
+  - **Reflective XSS** Open the landing page with the _dummy_ query param that contains DOM content (including script), add the provided DOM will be injected into the page and script executed.
+
   - **Persistent XSS** can be demonstrated using add testimonial form on the landing page (for authenticated users only).
 
 - **Default Login Location** - The login endpoint is available under /api/auth/login.
 
 - **Directory Listing** - The Nginx config file under the nginx-conf directory is configured to allow directory listing.
 
-- **DOM Cross-Site Scripting** - Open the landing page with the _dummy_ query param that contains DOM content (including script), add the provided DOM into the page, and execute it.
+- **DOM Cross-Site Scripting** - can be demonstrated by using the mailing list subscription form on the landing page.
+  - **Mailing List Subscription XSS** - The mailing list subscription form is vulnerable to reflective XSS. The form sends a POST request to `/api/subscriptions?email=VALUE`, and the server's response is embedded into the page without any validation on either the server or client side. This allows an attacker to inject malicious scripts into the DOM.
 
+    <details>
+      <summary>Example Exploitation</summary>
+
+      To demonstrate this vulnerability, you can submit the following payload in the email field of the subscription form:
+
+      ```html
+      <script>alert('XSS')</script>
+      ```
+      Brobser perform a POST request to `/api/subscriptions?email=<script>alert("XSS")</script>'` with the payload in the email field.
+      The server's response will include the injected script, which will be embedded into the page and executed by the browser. This can be used to execute arbitrary JavaScript code in the context of the user's session.
+
+      Example:
+      ![Example of DOM XSS Exploitation](docs/bc_dom_xss.gif)
+
+    </details>
+
+    ![Demonstration of Mailing List Subscription XSS](placeholder-for-gif.gif)
 - **File Upload** - The application allows uploading an avatar photo of the authenticated user. The server doesn't perform any sort of validation on the uploaded file.
   <details>
     <summary>Example of No Anti-Virus Protection</summary>
