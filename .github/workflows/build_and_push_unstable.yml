@@ -17,7 +17,7 @@ jobs:
 
       - name: Login to DockerHub
         run: |
-          docker login --username=${{ secrets.DOCKERHUB_BRIGHT_USER }} --password=${{ secrets.DOCKERHUB_BRIGHT_TOKEN }}
+          docker login --username=${{ vars.DOCKERHUB_BRIGHT_USER }} --password=${{ secrets.DOCKERHUB_BRIGHT_TOKEN }}
 
       - name: Generate timestamp
         id: timestamp
