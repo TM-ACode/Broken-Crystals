@@ -327,6 +327,49 @@ Full configuration & usage examples can be found in our [demo project](https://g
   </details>
 
 - **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
+  <details>
+    <summary>Version Control System Example Exploitation</summary>
+
+  To demonstrate the exposure of version control system files, you can use the following `curl` commands:
+
+  1. **Accessing Git Configuration**:
+
+     ```bash
+     curl https://brokencrystals.com/.git/config
+     ```
+
+     Example Response:
+
+     ```text
+     [core]
+         repositoryformatversion = 0
+         filemode = true
+         bare = false
+         logallrefupdates = true
+         ignorecase = true
+         precomposeunicode = true
+     ```
+
+  2. **Accessing Mercurial Requirements**:
+
+     ```bash
+     curl https://brokencrystals.com/.hg/requires
+     ```
+
+     Example Response:
+
+     ```text
+     dotencode
+     fncache
+     generaldelta
+     revlogv1
+     sparserevlog
+     store
+     ```
+
+  These responses indicate that the version control system files are publicly accessible, which can expose sensitive information about the repository.
+
+  </details>
 
 - **XML External Entity (XXE)** - The endpoint, POST /api/metadata, receives URL-encoded XML data in the _xml_ query parameter, processes it with enabled external entities (using `libxmljs` library) and returns the serialized DOM. Additionally, for a request that tries to load file:///etc/passwd as an entity, the endpoint returns a mocked up content of the file.
   <details>
