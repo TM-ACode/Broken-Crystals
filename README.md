@@ -422,7 +422,20 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **IFrame Injection** - The `/testimonials` page a URL parameter `videosrc` which directly controls the src attribute of the IFrame at the bottom of this page. Similarly, the home page takes a URL param `maptitle` which directly controls the `title` attribute of the IFrame at the CONTACT section of this page.
 
-- **Excessive Data Exposure** - The `/api/users/one/:email` is supposed to expose only basic user information required to be displayed on the UI, but it also returns the user's phone number which is unnecessary information.
+- **Excessive Data Exposure** - visiting the page `https://brokencrystals.com/adminpage` reveals a list of registered users, including their First Name, Last Name, Email, and Company. Observing the background traffic, a `GET /api/users/search/` request is made, and the response contains sensitive data such as `cardNumber` and `phoneNumber`.
+
+  This response exposes sensitive information, such as credit card numbers and phone numbers, which should not be accessible through this endpoint.
+
+  <details>
+    <summary>Demo of Excessive Data Exposure</summary>
+
+  ![Demo of Excessive Data Exposure](docs/excessive_data_exposure.gif)
+
+  ```
+
+  </details>
+
+  ```
 
 - **Business Constraint Bypass** - The `/api/products/latest` endpoint supports a `limit` parameter, which by default is set to 3. The `/api/products` endpoint is a password protected endpoint which returns all the products, yet if you change the `limit` param of `/api/products/latest` to be high enough you could get the same results without the need to be authenticated.
 
