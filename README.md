@@ -536,6 +536,14 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **JavaScript Vulnerabilities Scanning** - Index.html includes an older version of the jQuery library with known vulnerabilities.
 
 - **AO1 Vertical access controls** - The page /dashboard can be reached despite the rights of user.
+    <details>
+      <summary>Example of bac.gif Demonstration</summary>
+
+  To demonstrate the issue, you can refer to the following example:
+
+  ![Example of bac.gif Demonstration](docs/bac.gif)
+
+    </details>
 
 - **Broken Function Level Authorization** - The endpoint DELETE `/users/one/:id/photo?isAdmin=` can be used to delete any user's profile photo by enumerating the user IDs and setting the `isAdmin` query parameter to true, as there is no validation of it's value on the server side.
 
