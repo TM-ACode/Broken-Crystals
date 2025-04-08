@@ -699,7 +699,13 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Broken Function Level Authorization** - The endpoint DELETE `/users/one/:id/photo?isAdmin=` can be used to delete any user's profile photo by enumerating the user IDs and setting the `isAdmin` query parameter to true, as there is no validation of it's value on the server side.
 
-- **IFrame Injection** - The `/testimonials` page a URL parameter `videosrc` which directly controls the src attribute of the IFrame at the bottom of this page. Similarly, the home page takes a URL param `maptitle` which directly controls the `title` attribute of the IFrame at the CONTACT section of this page.
+- **IFrame Injection** - The `/marketplace` page a URL parameter `videosrc` which directly controls the src attribute of the IFrame at the bottom of this page. Similarly, the home page takes a URL param `maptitle` which directly controls the `title` attribute of the IFrame at the CONTACT section of this page.
+  <details>
+    <summary>IFrame Injection Example Exploitation</summary>
+
+  ![IFrame Injection Demonstration](docs/iframe.gif)
+
+  </details>
 
 - **Excessive Data Exposure** - visiting the page `https://brokencrystals.com/adminpage` reveals a list of registered users, including their First Name, Last Name, Email, and Company. Observing the background traffic, a `GET /api/users/search/` request is made, and the response contains sensitive data such as `cardNumber` and `phoneNumber`.
 
