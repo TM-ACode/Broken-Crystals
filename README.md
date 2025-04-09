@@ -296,6 +296,21 @@ Full configuration & usage examples can be found in our [demo project](https://g
   </details>
 
 - **Full Path Disclosure** - All errors returned by the server include the full path of the file where the error has occurred. The errors can be triggered by passing wrong values as parameters or by modifying the bc-calls-counter cookie to a non-numeric value.
+  <details>
+    <summary>Example of Full Path Disclosure</summary>
+    ```bash
+    curl -H 'Cookie:bc-calls-counter=notint;' 'https://wset--26331-12.k3s.brokencrystals.nexploit.app/api/products/latest'
+    ```
+    Response:
+    ```json
+    {
+      "error": "Invalid counter value",
+      "location": "/usr/src/app/dist/components/global-exception.filter.js"
+    }
+    ```
+    The location field in the JSON response reveals the full internal file path: /usr/src/app/dist/components/global-exception.filter.js.
+    This is sensitive information that should not be exposed to users, as it provides insights into the server's directory structure.
+  </details>
 
 - **Headers Security Check** - The application is configured with misconfigured security headers. The list of headers is available in the headers.configurator.interceptor.ts file. A user can pass the _no-sec-headers_ query param to any API to prevent the server from sending the headers.
 
