@@ -315,6 +315,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **Headers Security Check** - The application is configured with misconfigured security headers. The list of headers is available in the headers.configurator.interceptor.ts file. A user can pass the _no-sec-headers_ query param to any API to prevent the server from sending the headers.
 
 - **HTML Injection** - Both forms testimonial and mailing list subscription forms allow HTML injection.
+  <details>
+    <summary>Example of HTML Injection</summary>
+
+  ![Example of HTML Injection](docs/htmli.gif)
+
+  </details>
 
 - **CSS Injection** - The login page is vulnerable to CSS Injections through a URL parameter: https://brokencrystals.com/userlogin?logobgcolor=transparent.
 
