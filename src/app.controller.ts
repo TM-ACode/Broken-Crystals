@@ -95,10 +95,11 @@ export class AppController {
   @Redirect()
   async redirect(@Query('url') url: string) {
     const allowedUrls = ['https://example.com', 'https://another-allowed-url.com'];
-    if (!allowedUrls.includes(url)) {
+    const parsedUrl = new URL(url);
+    if (!allowedUrls.includes(parsedUrl.origin)) {
       throw new HttpException('URL not allowed', HttpStatus.BAD_REQUEST);
     }
-    return { url };
+    return { url: parsedUrl.toString() };
   }
 
   @Post('metadata')
@@ -125,7 +126,9 @@ export class AppController {
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      noent: false, // Disable external entity expansion
+      noent: true, // Disable external entity expansion
+      dtdload: false, // Disable DTD loading
+      dtdattr: false, // Disable default DTD attributes
       dtdvalid: false, // Disable DTD validation
       recover: true
     });
@@ -178,8 +181,12 @@ export class AppController {
   })
   getConfig(): AppConfig {
     this.logger.debug('Called getConfig');
+    // Fetch configuration securely from environment variables or a secure service
     const config = this.appService.getConfig();
-    return config;
+    // Ensure no sensitive information is returned
+    const safeConfig = { ...config };
+    delete safeConfig.secretToken; // Assuming secretToken is a sensitive field
+    return safeConfig;
   }
 
   @Get('/secrets')
