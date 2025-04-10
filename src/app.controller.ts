@@ -95,11 +95,15 @@ export class AppController {
   @Redirect()
   async redirect(@Query('url') url: string) {
     const allowedUrls = ['https://example.com', 'https://another-allowed-url.com'];
-    const parsedUrl = new URL(url);
-    if (!allowedUrls.includes(parsedUrl.origin)) {
-      throw new HttpException('URL not allowed', HttpStatus.BAD_REQUEST);
+    try {
+      const parsedUrl = new URL(url);
+      if (!allowedUrls.includes(parsedUrl.origin)) {
+        throw new HttpException('URL not allowed', HttpStatus.BAD_REQUEST);
+      }
+      return { url: parsedUrl.toString() };
+    } catch (error) {
+      throw new HttpException('Invalid URL format', HttpStatus.BAD_REQUEST);
     }
-    return { url: parsedUrl.toString() };
   }
 
   @Post('metadata')
@@ -126,7 +130,7 @@ export class AppController {
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      noent: true, // Disable external entity expansion
+      noent: false, // Ensure external entity expansion is disabled
       dtdload: false, // Disable DTD loading
       dtdattr: false, // Disable default DTD attributes
       dtdvalid: false, // Disable DTD validation
