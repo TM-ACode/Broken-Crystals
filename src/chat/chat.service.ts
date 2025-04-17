@@ -42,7 +42,8 @@ export class ChatService {
       messages,
       max_tokens:
         +process.env.CHAT_API_MAX_TOKENS || DEFAULT_CHAT_API_MAX_TOKENS,
-      stream: false
+      stream: false,
+      temperature: 0.7
     };
 
     const res = await this.httpClient.post<ChatResponse>(
