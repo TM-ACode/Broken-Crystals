@@ -15,22 +15,12 @@ export class CloudProvidersMetaData {
   private providers: Map<string, string> = new Map<string, string>();
 
   constructor() {
-    //TODO - set correct values
-    this.providers.set(
+     this.providers.set(
       CloudProvidersMetaData.GOOGLE,
       `
-        attributes/
-        cpu-platform
-        description
-        instance
-        hostname
-        project
-        disks
-        service-accounts
-        tags
-        guest-attributes
-        maintenance-event
-        network-interfaces/
+        instance/
+        oslogin/
+        project/
     `.trim()
     );
     this.providers.set(
