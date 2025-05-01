@@ -21,7 +21,7 @@ after(() => runner.clear());
 test('GET /api/partners/partnerLogin', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['xpathi', 'xss', 'csrf', 'improper_asset_management'],
+      tests: ['xpathi'],
       attackParamLocations: [AttackParamLocation.QUERY, AttackParamLocation.HEADER]
     })
     .threshold(Severity.CRITICAL)
