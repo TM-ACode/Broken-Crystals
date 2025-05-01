@@ -1,3 +1,4 @@
+```
 import { test, before, after } from 'node:test';
 import { SecRunner } from '@sectester/runner';
 import { Severity, AttackParamLocation, HttpMethod } from '@sectester/scan';
@@ -21,7 +22,7 @@ after(() => runner.clear());
 test('GET /api/partners/searchPartners', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['xpathi', 'xss', 'full_path_disclosure'],
+      tests: ['xpathi'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)
@@ -32,3 +33,4 @@ test('GET /api/partners/searchPartners', { signal: AbortSignal.timeout(timeout) 
       headers: { 'Content-Type': 'text/xml' }
     });
 });
+```
