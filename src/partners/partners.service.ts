@@ -60,10 +60,15 @@ export class PartnersService {
   }
 
   private selectPartnerPropertiesByXPATH(
-    xpathExpression: string
+    xpathExpression: string,
+    params: Record<string, string> = {}
   ): SelectReturnType {
     const partnersXMLObj = this.getPartnersXMLObj();
-    return xpath.select(xpathExpression, partnersXMLObj);
+    const variables = Object.entries(params).reduce((acc, [key, value]) => {
+      acc[`$${key}`] = value;
+      return acc;
+    }, {});
+    return xpath.selectWithParams(xpathExpression, partnersXMLObj, variables);
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
@@ -72,6 +77,21 @@ export class PartnersService {
 
   getPartnersProperties(xpathExpression: string): string {
     let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
+
+    if (!Array.isArray(xmlNodes)) {
+      this.logger.debug(
+        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
+      );
+      xmlNodes = [];
+    } else {
+      this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
+    }
+
+    return this.getFormattedXMLOutput(xmlNodes);
+  }
+
+  getPartnersPropertiesWithParams(xpathExpression: string, params: Record<string, string>): string {
+    let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression, params);
 
     if (!Array.isArray(xmlNodes)) {
       this.logger.debug(
