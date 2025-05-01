@@ -27,7 +27,7 @@ jobs:
       - name: Start application
         run: docker compose --file=compose.local.yml up --wait
 
-      - name: Verify application readiness
+      - name: Verify application
         run: |
           until nc -zv 127.0.0.1 3000; do
             echo "Waiting for application to be ready..."
