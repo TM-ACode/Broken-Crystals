@@ -25,6 +25,11 @@ export class FileService {
         throw new Error('Access to this host is not allowed');
       }
 
+      // Ensure the URL path is valid
+      if (!this.isAllowedPath(url.pathname)) {
+        throw new Error('Access to this path is not allowed');
+      }
+
       const content = await this.cloudProviders.get(file);
 
       if (content) {
@@ -45,6 +50,12 @@ export class FileService {
     // Define a whitelist of allowed hostnames
     const allowedHosts = ['metadata.google.internal'];
     return allowedHosts.includes(hostname);
+  }
+
+  private isAllowedPath(pathname: string): boolean {
+    // Define a whitelist of allowed paths
+    const allowedPaths = ['/computeMetadata/v1/'];
+    return allowedPaths.some(allowedPath => pathname.startsWith(allowedPath));
   }
 
   async deleteFile(file: string): Promise<boolean> {
