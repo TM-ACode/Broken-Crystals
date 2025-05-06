@@ -699,10 +699,7 @@ export class AuthController {
         });
       }
 
-      throw new InternalServerErrorException({
-        error: 'An internal error occurred',
-        location: 'AuthController'
-      });
+      throw new InternalServerErrorException('An internal error occurred');
     }
   }
 
@@ -712,10 +709,7 @@ export class AuthController {
     try {
       user = await this.usersService.findByEmail(req.user);
     } catch (err) {
-      throw new InternalServerErrorException({
-        error: 'An internal error occurred',
-        location: 'AuthController'
-      });
+      throw new InternalServerErrorException('An internal error occurred');
     }
 
     if (!user || !(await passwordMatches(req.password, user.password))) {
