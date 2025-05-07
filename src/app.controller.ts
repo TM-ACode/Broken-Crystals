@@ -92,7 +92,7 @@ export class AppController {
        const parsedUrl = new URL(url);
        if (!allowedHosts.includes(parsedUrl.hostname)) {
         this.logger.warn(`Blocked redirect to disallowed host: ${parsedUrl.hostname}`);
-        throw new HttpException('Invalid or disallowed URL', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Invalid or disallowed URL', HttpStatus.FORBIDDEN);
        }
        return { url: parsedUrl.toString() };
      } catch (error) {
