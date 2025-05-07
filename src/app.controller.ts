@@ -87,7 +87,17 @@ export class AppController {
   })
   @Redirect()
   async redirect(@Query('url') url: string) {
-    return { url };
+     const allowedHosts = ['google.com', 'example.com'];
+     try {
+       const parsedUrl = new URL(url);
+       if (!allowedHosts.includes(parsedUrl.hostname)) {
+         throw new Error('Disallowed host');
+       }
+       return { url: parsedUrl.toString() };
+     } catch (error) {
+       this.logger.warn(`Blocked redirect to disallowed URL: ${url}`);
+       throw new HttpException('Invalid or disallowed URL', HttpStatus.BAD_REQUEST);
+     }
   }
 
   @Post('metadata')
