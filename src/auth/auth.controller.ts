@@ -265,17 +265,22 @@ export class AuthController {
     @Res({ passthrough: true }) res: FastifyReply
   ): Promise<LoginResponse> {
     this.logger.debug('Call loginWithKIDSqlJwt');
-    const profile = await this.loginBasic(req);
+    try {
+      const profile = await this.loginBasic(req);
 
-    res.header(
-      'authorization',
-      await this.authService.createToken(
-        { user: profile.email },
-        JwtProcessorType.SQL_KID
-      )
-    );
+      res.header(
+        'authorization',
+        await this.authService.createToken(
+          { user: profile.email },
+          JwtProcessorType.SQL_KID
+        )
+      );
 
-    return profile;
+      return profile;
+    } catch (error) {
+      this.logger.error('Error during loginWithKIDSqlJwt', error.stack);
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
   @Get('jwt/kid-sql/validate')
@@ -298,9 +303,19 @@ export class AuthController {
     description: SWAGGER_DESC_VALIDATE_WITH_KID_SQL_JWT
   })
   async validateWithKIDSqlJwt(): Promise<JwtValidationResponse> {
-    return {
-      secret: 'this is our secret'
-    };
+    try {
+      // Simulate some processing logic
+      const secret = this.processJwtValidation();
+      return { secret };
+    } catch (error) {
+      this.logger.error('Error during JWT validation', error.stack);
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
+  }
+
+  private processJwtValidation(): string {
+    // Placeholder for actual JWT validation logic
+    return 'this is our secret';
   }
 
   @Post('jwt/weak-key/login')
@@ -680,13 +695,13 @@ export class AuthController {
       if (err.response?.status === 401) {
         throw new UnauthorizedException({
           error: 'Invalid credentials',
-          location: __filename
+          location: 'AuthController'
         });
       }
 
       throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
+        error: 'An unexpected error occurred',
+        location: 'AuthController'
       });
     }
   }
@@ -698,22 +713,22 @@ export class AuthController {
       user = await this.usersService.findByEmail(req.user);
     } catch (err) {
       throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
+        error: 'An unexpected error occurred',
+        location: 'AuthController'
       });
     }
 
     if (!user || !(await passwordMatches(req.password, user.password))) {
       throw new UnauthorizedException({
         error: 'Invalid credentials',
-        location: __filename
+        location: 'AuthController'
       });
     }
 
     if (!user.isBasic) {
       throw new ForbiddenException({
         error: 'Invalid authentication method for this user',
-        location: __filename
+        location: 'AuthController'
       });
     }
 
