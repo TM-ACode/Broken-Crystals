@@ -673,9 +673,14 @@ export class AuthController {
     }
   })
   async validateWithHMACJwt(): Promise<JwtValidationResponse> {
-    return {
-      secret: 'this is our secret'
-    };
+    try {
+      return {
+        secret: 'this is our secret'
+      };
+    } catch (error) {
+      this.logger.error('Error during JWT validation', error.stack);
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
   }
 
   private async loginOidc(req: LoginRequest): Promise<LoginData> {
