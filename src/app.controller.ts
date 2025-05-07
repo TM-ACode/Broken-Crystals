@@ -91,12 +91,13 @@ export class AppController {
      try {
        const parsedUrl = new URL(url);
        if (!allowedHosts.includes(parsedUrl.hostname)) {
-         throw new Error('Disallowed host');
+        this.logger.warn(`Blocked redirect to disallowed host: ${parsedUrl.hostname}`);
+        throw new HttpException('Invalid or disallowed URL', HttpStatus.BAD_REQUEST);
        }
        return { url: parsedUrl.toString() };
      } catch (error) {
-       this.logger.warn(`Blocked redirect to disallowed URL: ${url}`);
-       throw new HttpException('Invalid or disallowed URL', HttpStatus.BAD_REQUEST);
+       this.logger.error(`Error processing redirect URL: ${url}`, error.stack);
+       throw new HttpException('Invalid URL format', HttpStatus.BAD_REQUEST);
      }
   }
 
