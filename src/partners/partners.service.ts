@@ -75,7 +75,26 @@ export class PartnersService {
     return input.replace(/'/g, "\'");
   }
 
+  private validateXPathInput(input: string): boolean {
+    // Basic validation to ensure input does not contain dangerous characters
+    const forbiddenPatterns = [
+      /\b(or|and)\b/i, // logical operators
+      /\|\||&&/, // logical operators
+      /\/\//, // double slashes
+      /\[.*\]/, // brackets
+      /@/, // attribute selectors
+      /\bcontains\b/i, // contains function
+    ];
+    return !forbiddenPatterns.some((pattern) => pattern.test(input));
+  }
+
   getPartnersProperties(xpathExpression: string): string {
+    // Validate the input to prevent XPath Injection
+    if (!this.validateXPathInput(xpathExpression)) {
+      this.logger.warn(`Invalid XPath expression detected: ${xpathExpression}`);
+      throw new Error('Invalid XPath expression');
+    }
+
     // Sanitize the input to prevent XPath Injection
     const sanitizedXpathExpression = this.sanitizeInput(xpathExpression);
     let xmlNodes = this.selectPartnerPropertiesByXPATH(sanitizedXpathExpression);
