@@ -89,8 +89,13 @@ export class PartnersService {
   }
 
   private sanitizeXpath(xpathExpression: string): string {
-    // Basic sanitization logic to escape single quotes
-    return xpathExpression.replace(/'/g, "\'");
+    // Use a whitelist approach to sanitize the XPath expression
+    // Only allow certain characters and patterns
+    const allowedPattern = /^[a-zA-Z0-9_\/\[\]\(\)\@\=\'\s]+$/;
+    if (!allowedPattern.test(xpathExpression)) {
+      throw new Error('Invalid characters in XPath expression');
+    }
+    return xpathExpression;
   }
 
   private sanitizeXmlOutput(xmlOutput: string): string {
