@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
-import { encode } from 'jwt-simple';
+import { encode, decode } from 'jwt-simple';
 import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 import { KeyCloakService } from '../../keycloak/keycloak.service';
 
@@ -19,6 +19,11 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
       throw new Error(
         'Authorization header contains an invalid JWT token: header or payload is missing.'
       );
+    }
+
+    if (header.alg === 'none') {
+      this.log.debug('JWT token uses none algorithm, which is not allowed.');
+      throw new Error('JWT token uses none algorithm, which is not allowed.');
     }
 
     if (!header.kid) {
@@ -76,6 +81,16 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
       throw new Error(
         'Authorization header contains an invalid JWT token: ' + e.message
       );
+    }
+  }
+
+  private parse(token: string): [any, any] {
+    try {
+      const decoded = decode(token, '', true); // Decode without verifying signature
+      return [decoded.header, decoded.payload];
+    } catch (e) {
+      this.log.debug(`Failed to parse JWT token: ${e.message}`);
+      return [null, null];
     }
   }
 }

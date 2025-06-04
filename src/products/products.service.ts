@@ -10,6 +10,7 @@ import { Product } from '../model/product.entity';
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger(ProductsService.name);
+  private readonly MAX_LIMIT = 50; // Define a maximum limit for the number of products
 
   constructor(
     @InjectRepository(Product)
@@ -44,9 +45,10 @@ export class ProductsService {
 
   async findLatest(limit: number): Promise<Product[]> {
     this.logger.debug(`Find ${limit} latest products`);
+    const effectiveLimit = Math.min(limit, this.MAX_LIMIT); // Enforce the maximum limit
     return this.productsRepository.find(
       {},
-      { limit, orderBy: { createdAt: 'desc' } }
+      { limit: effectiveLimit, orderBy: { createdAt: 'desc' } }
     );
   }
 
