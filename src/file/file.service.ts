@@ -10,21 +10,22 @@ export class FileService {
   private readonly logger = new Logger(FileService.name);
   private cloudProviders = new CloudProvidersMetaData();
 
+  private readonly allowedPaths = ['config/products/crystals']; // Define allowed directories
+
   async getFile(file: string): Promise<Stream> {
     this.logger.log(`Reading file: ${file}`);
+
+    // Validate the file path
+    if (!this.isValidPath(file)) {
+      throw new Error('Invalid file path');
+    }
 
     if (file.startsWith('/')) {
       await fs.promises.access(file, R_OK);
 
       return fs.createReadStream(file);
     } else if (file.startsWith('http')) {
-      const content = await this.cloudProviders.get(file);
-
-      if (content) {
-        return Readable.from(content);
-      } else {
-        throw new Error(`no such file or directory, access '${file}'`);
-      }
+      throw new Error('Remote file access is not allowed');
     } else {
       file = path.resolve(process.cwd(), file);
 
@@ -32,6 +33,11 @@ export class FileService {
 
       return fs.createReadStream(file);
     }
+  }
+
+  private isValidPath(filePath: string): boolean {
+    const resolvedPath = path.resolve(filePath);
+    return this.allowedPaths.some(allowedPath => resolvedPath.startsWith(path.resolve(allowedPath)));
   }
 
   async deleteFile(file: string): Promise<boolean> {

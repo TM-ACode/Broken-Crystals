@@ -122,10 +122,19 @@ export class AuthService {
   }
 
   validateToken(token: string, processor: JwtProcessorType): Promise<unknown> {
+    if (!this.isAlgorithmAllowed(token)) {
+      throw new Error('Invalid token algorithm');
+    }
     return this.processors.get(processor).validateToken(token);
   }
 
   createToken(payload: unknown, processor: JwtProcessorType): Promise<string> {
     return this.processors.get(processor).createToken(payload);
+  }
+
+  private isAlgorithmAllowed(token: string): boolean {
+    const decodedHeader = JSON.parse(Buffer.from(token.split('.')[0], 'base64').toString('utf8'));
+    const allowedAlgorithms = ['RS256', 'HS256']; // Add allowed algorithms here
+    return allowedAlgorithms.includes(decodedHeader.alg);
   }
 }
