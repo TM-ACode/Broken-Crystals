@@ -75,8 +75,18 @@ export class PartnersService {
     return input.replace(/'/g, "\'");
   }
 
+  private validateXPathInput(input: string): boolean {
+    // Allow only alphanumeric characters and basic XPath operators
+    const regex = /^[a-zA-Z0-9_\-\/\[\]\(\)\@\=\s]+$/;
+    return regex.test(input);
+  }
+
   getPartnersProperties(xpathExpression: string): string {
-    // Sanitize the input to prevent XPath Injection
+    // Validate the input to prevent XPath Injection
+    if (!this.validateXPathInput(xpathExpression)) {
+      throw new Error('Invalid characters in XPath expression');
+    }
+
     const sanitizedXpathExpression = this.sanitizeInput(xpathExpression);
     let xmlNodes = this.selectPartnerPropertiesByXPATH(sanitizedXpathExpression);
 
