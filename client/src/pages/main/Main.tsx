@@ -9,8 +9,21 @@ import Footer from './Footer';
 
 // Add jQuery to Window interface
 declare global {
+  // Define jQuery interface to avoid using 'any'
+  interface JQuery {
+    delay(ms: number): JQuery;
+    fadeOut(speed: string, callback?: (this: HTMLElement) => void): JQuery;
+    remove(): void;
+    length: number;
+  }
+
+  // Define jQuery static interface
+  interface JQueryStatic {
+    (selector: string | HTMLElement): JQuery;
+  }
+
   interface Window {
-    jQuery: any;
+    jQuery: JQueryStatic;
   }
 }
 
