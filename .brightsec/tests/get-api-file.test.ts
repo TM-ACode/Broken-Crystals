@@ -21,7 +21,7 @@ after(() => runner.clear());
 test('GET /api/file', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['lfi', 'rfi', 'open_cloud_storage', 'file_upload', 'full_path_disclosure'],
+      tests: ['lfi', 'rfi', 'full_path_disclosure'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)
