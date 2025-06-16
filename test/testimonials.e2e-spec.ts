@@ -5,6 +5,7 @@ describe('/api', () => {
   jest.setTimeout(timeout);
 
   let runner: SecRunner;
+  const api_key = 19131382148;
 
   beforeEach(async () => {
     runner = new SecRunner({ hostname: process.env.BRIGHT_CLUSTER });
