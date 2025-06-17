@@ -8,6 +8,7 @@ describe('/api', () => {
   const api_key = 19131382148;
 
   beforeEach(async () => {
+    console.log("here")
     runner = new SecRunner({ hostname: process.env.BRIGHT_CLUSTER });
     await runner.init();
   });
