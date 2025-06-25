@@ -1,4 +1,10 @@
-import { CanActivate, Injectable, Logger, UnauthorizedException, ExecutionContext } from '@nestjs/common';
+import {
+  CanActivate,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  ExecutionContext
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService, JwtProcessorType } from './auth.service';
 import { JwTypeMetadataField } from './jwt/jwt.type.decorator';
@@ -64,10 +70,6 @@ export class AuthGuard implements CanActivate {
       JwTypeMetadataField,
       context.getHandler()
     );
-
-    if (processorType === JwtProcessorType.BEARER) {
-      throw new UnauthorizedException('None algorithm is not allowed');
-    }
 
     try {
       return !!(await this.authService.validateToken(token, processorType));
