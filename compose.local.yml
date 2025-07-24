@@ -72,6 +72,10 @@ services:
       timeout: 30s
     environment:
       URL: http://localhost:3000
+      CHAT_API_URL: http://ollama:11434/v1/chat/completions
+      CHAT_API_MODEL: qwen3:0.6b
+      CHAT_API_TOKEN: ""
+      CHAT_API_MAX_TOKENS: 1000
     ports:
       - '3000:3000'
     logging:
@@ -84,6 +88,8 @@ services:
       mailcatcher:
         condition: service_healthy
       keycloak:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
 
   mailcatcher:

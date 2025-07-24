@@ -28,6 +28,10 @@ services:
       timeout: 30s
     environment:
       NODE_ENV: production
+      CHAT_API_URL: http://ollama:11434/v1/chat/completions
+      CHAT_API_MODEL: qwen3:0.6b
+      CHAT_API_TOKEN: ""
+      CHAT_API_MAX_TOKENS: 1000
     deploy:
       restart_policy:
         condition: on-failure
@@ -42,6 +46,7 @@ services:
       - db
       - mailcatcher
       - keycloak
+      - ollama
 
   watchtower:
     image: 'containrrr/watchtower'
