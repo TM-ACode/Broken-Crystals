@@ -28,6 +28,10 @@ services:
       timeout: 30s
     environment:
       NODE_ENV: production
+      CHAT_API_URL: http://ollama:11434/v1/chat/completions
+      CHAT_API_MODEL: qwen3:0.6b
+      CHAT_API_TOKEN: ""
+      CHAT_API_MAX_TOKENS: 1000
     deploy:
       restart_policy:
         condition: on-failure
@@ -42,6 +46,7 @@ services:
       - db
       - mailcatcher
       - keycloak
+      - ollama
 
   watchtower:
     image: 'containrrr/watchtower'
@@ -120,6 +125,37 @@ services:
       options:
         max-file: '5'
         max-size: '10m'
+
+  ollama:
+    image: 'ollama/ollama:latest'
+    restart: always
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test: ['CMD', 'ollama', 'list']
+      timeout: 10s
+      start_period: 60s
+    ports:
+      - '11434:11434'
+    volumes:
+      - '.data/ollama:/root/.ollama'
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: 2.0
+    logging:
+      options:
+        max-file: '5'
+        max-size: '10m'
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "ollama serve &
+      sleep 10 &&
+      ollama pull qwen3:0.6b &&
+      ollama run qwen3:0.6b --help > /dev/null 2>&1 &&
+      wait"
 
 volumes:
   letsencrypt:

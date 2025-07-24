@@ -72,6 +72,10 @@ services:
       timeout: 30s
     environment:
       URL: http://localhost:3000
+      CHAT_API_URL: http://ollama:11434/v1/chat/completions
+      CHAT_API_MODEL: qwen3:0.6b
+      CHAT_API_TOKEN: ""
+      CHAT_API_MAX_TOKENS: 1000
     ports:
       - '3000:3000'
     logging:
@@ -84,6 +88,8 @@ services:
       mailcatcher:
         condition: service_healthy
       keycloak:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
 
   mailcatcher:
@@ -101,3 +107,28 @@ services:
       options:
         max-file: '5'
         max-size: '10m'
+
+  ollama:
+    image: 'ollama/ollama:latest'
+    restart: always
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test: ['CMD', 'ollama', 'list']
+      timeout: 10s
+      start_period: 60s
+    ports:
+      - '11434:11434'
+    volumes:
+      - '.data/ollama:/root/.ollama'
+    logging:
+      options:
+        max-file: '5'
+        max-size: '10m'
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "ollama serve &
+      sleep 10 &&
+      ollama pull qwen3:0.6b &&
+      ollama run qwen3:0.6b --help > /dev/null 2>&1 &&
+      wait"
