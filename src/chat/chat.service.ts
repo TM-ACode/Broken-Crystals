@@ -29,8 +29,7 @@ export class ChatService {
 
     if (
       !process.env.CHAT_API_URL ||
-      !process.env.CHAT_API_MODEL ||
-      !process.env.CHAT_API_TOKEN
+      !process.env.CHAT_API_MODEL
     ) {
       throw new Error(
         'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL, CHAT_API_TOKEN are mandatory.'
@@ -52,8 +51,7 @@ export class ChatService {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.CHAT_API_TOKEN}`
-        }
+         }
       }
     );
 

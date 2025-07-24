@@ -29,8 +29,7 @@ services:
     environment:
       NODE_ENV: production
       CHAT_API_URL: http://ollama:11434/v1/chat/completions
-      CHAT_API_MODEL: qwen3:0.6b
-      CHAT_API_TOKEN: ""
+      CHAT_API_MODEL: smollm:135m
       CHAT_API_MAX_TOKENS: 1000
     deploy:
       restart_policy:
@@ -153,8 +152,8 @@ services:
     command: >
       "ollama serve &
       sleep 10 &&
-      ollama pull qwen3:0.6b &&
-      ollama run qwen3:0.6b --help > /dev/null 2>&1 &&
+      ollama pull smollm:135m &&
+      ollama run smollm:135m > /dev/null 2>&1 &&
       wait"
 
 volumes:
