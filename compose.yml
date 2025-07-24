@@ -121,5 +121,35 @@ services:
         max-file: '5'
         max-size: '10m'
 
+  ollama:
+    image: 'ollama/ollama:latest'
+    restart: always
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test: ['CMD', 'ollama', 'list']
+      timeout: 10s
+      start_period: 60s
+    ports:
+      - '11434:11434'
+    volumes:
+      - '.data/ollama:/root/.ollama'
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: 2.0
+    logging:
+      options:
+        max-file: '5'
+        max-size: '10m'
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "ollama serve &
+      sleep 10 &&
+      ollama pull qwen3:0.6b &&
+      wait"
+
 volumes:
   letsencrypt:
