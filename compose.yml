@@ -149,6 +149,7 @@ services:
       "ollama serve &
       sleep 10 &&
       ollama pull qwen3:0.6b &&
+      ollama run qwen3:0.6b --help > /dev/null 2>&1 &&
       wait"
 
 volumes:
