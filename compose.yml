@@ -30,6 +30,7 @@ services:
       NODE_ENV: production
       CHAT_API_URL: http://ollama:11434/v1/chat/completions
       CHAT_API_MODEL: smollm:135m
+      CHAT_API_TOKEN: ''
       CHAT_API_MAX_TOKENS: 1000
     deploy:
       restart_policy:
@@ -126,7 +127,7 @@ services:
         max-size: '10m'
 
   ollama:
-    image: 'neuralegion/brokencrystals-ollama:latest'
+    image: 'ghcr.io/neuralegion/brokencrystals-ollama:latest'
     restart: always
     healthcheck:
       interval: 30s

@@ -27,9 +27,13 @@ export class ChatService {
   async query(messages: ChatMessage[]): Promise<string> {
     this.logger.debug(`Chat query: ${JSON.stringify(messages)}`);
 
-    if (!process.env.CHAT_API_URL || !process.env.CHAT_API_MODEL) {
+    if (
+      !process.env.CHAT_API_URL ||
+      !process.env.CHAT_API_MODEL ||
+      process.env.CHAT_API_TOKEN === undefined // Allow empty string since we use ollama by default
+    ) {
       throw new Error(
-        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL are mandatory.'
+        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL are mandatory. CHAT_API_TOKEN is required if using external services.'
       );
     }
 
@@ -47,7 +51,8 @@ export class ChatService {
       chatRequest,
       {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.CHAT_API_TOKEN}`
         }
       }
     );
