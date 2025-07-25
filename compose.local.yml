@@ -108,7 +108,7 @@ services:
         max-size: '10m'
 
   ollama:
-    image: 'ollama/ollama:latest'
+    image: 'alpine/ollama:latest'
     restart: always
     healthcheck:
       interval: 30s
