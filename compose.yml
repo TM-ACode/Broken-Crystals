@@ -152,8 +152,7 @@ services:
     command: >
       "ollama serve &
       sleep 10 &&
-      ollama pull smollm:135m &&
-      ollama run smollm:135m > /dev/null 2>&1 &&
+      ollama list | grep smollm || ollama pull smollm:135m &&
       wait"
 
 volumes:
