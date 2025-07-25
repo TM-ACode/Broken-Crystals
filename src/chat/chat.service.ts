@@ -32,7 +32,7 @@ export class ChatService {
       !process.env.CHAT_API_MODEL
     ) {
       throw new Error(
-        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL, CHAT_API_TOKEN are mandatory.'
+        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL are mandatory.'
       );
     }
 

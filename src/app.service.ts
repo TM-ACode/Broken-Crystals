@@ -46,7 +46,7 @@ export class AppService {
   }
 
   getConfig(): AppConfig {
-    this.logger.debug('Called getConfig');
+
     const dbSchema = this.configService.get<string>(
         OrmModuleConfigProperties.ENV_DATABASE_SCHEMA
       ),
