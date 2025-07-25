@@ -27,10 +27,7 @@ export class ChatService {
   async query(messages: ChatMessage[]): Promise<string> {
     this.logger.debug(`Chat query: ${JSON.stringify(messages)}`);
 
-    if (
-      !process.env.CHAT_API_URL ||
-      !process.env.CHAT_API_MODEL
-    ) {
+    if (!process.env.CHAT_API_URL || !process.env.CHAT_API_MODEL) {
       throw new Error(
         'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL are mandatory.'
       );
@@ -50,8 +47,8 @@ export class ChatService {
       chatRequest,
       {
         headers: {
-          'Content-Type': 'application/json',
-         }
+          'Content-Type': 'application/json'
+        }
       }
     );
 

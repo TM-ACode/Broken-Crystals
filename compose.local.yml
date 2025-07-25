@@ -124,7 +124,7 @@ services:
       options:
         max-file: '5'
         max-size: '10m'
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: ['/bin/sh', '-c']
     command: >
       "ollama serve &
       sleep 10 &&
