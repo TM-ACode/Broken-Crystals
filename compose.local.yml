@@ -108,7 +108,7 @@ services:
         max-size: '10m'
 
   ollama:
-    image: 'alpine/ollama:latest'
+    image: 'neuralegion/brokencrystals-ollama:latest'
     restart: always
     healthcheck:
       interval: 30s
