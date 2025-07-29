@@ -53,7 +53,8 @@ export class ChatService {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.CHAT_API_TOKEN}`
-        }
+        },
+        timeout: 150000 // 150 seconds timeout
       }
     );
 
