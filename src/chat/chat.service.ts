@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { HttpClientService } from '../httpclient/httpclient.service';
 import { ChatMessage } from './api/ChatMessage';
 
-const DEFAULT_CHAT_API_MAX_TOKENS = 1000;
+const DEFAULT_CHAT_API_MAX_TOKENS = 200;
 
 interface ChatRequest {
   readonly model: string;
