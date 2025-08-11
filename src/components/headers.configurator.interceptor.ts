@@ -28,6 +28,14 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const req = this.getRequest(context);
 
+    const FLAG = HeadersConfiguratorInterceptor.NO_SEC_HEADERS_QUERY_PARAM;
+    const hasFlag =
+      req.query &&
+      Object.prototype.hasOwnProperty.call(
+        req.query as Record<string, unknown>,
+        FLAG
+      );
+
     const cookies: string[] = req.headers.cookie
       ? req.headers.cookie.split('; ')
       : [];
@@ -53,13 +61,10 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(() => {
         const res = this.getResponse(context);
-        const req = this.getRequest(context);
         res.setCookie('bc-calls-counter', Date.now().toString(), {
           secure: false
         });
-        if (
-          !req.query[HeadersConfiguratorInterceptor.NO_SEC_HEADERS_QUERY_PARAM]
-        ) {
+        if (!hasFlag) {
           res.header(HeadersConfiguratorInterceptor.XSS_PROTECTION_HEADER, '0');
           res.header(
             HeadersConfiguratorInterceptor.STRICT_TRANSPORT_SECURITY_HEADER,
