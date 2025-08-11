@@ -53,6 +53,7 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(() => {
         const res = this.getResponse(context);
+        const req = this.getRequest(context);
         res.setCookie('bc-calls-counter', Date.now().toString(), {
           secure: false
         });
