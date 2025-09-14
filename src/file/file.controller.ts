@@ -22,6 +22,7 @@ import {
 import { W_OK } from 'constants';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Buffer } from 'buffer';
 import { Stream } from 'stream';
 import { FileService } from './file.service';
 import { FastifyReply } from 'fastify';
@@ -279,21 +280,29 @@ export class FileController {
   @ApiOperation({
     description: SWAGGER_DESC_SAVE_RAW_CONTENT
   })
-  @ApiOkResponse()
   async uploadFile(
     @Query('path') file: string,
     @Body() raw: string
   ): Promise<string> {
     try {
+      // Prevent path traversal by resolving and validating the file path
+      const baseDir = path.resolve(process.cwd(), 'uploads');
+      const resolvedPath = path.resolve(baseDir, file);
+      if (!resolvedPath.startsWith(baseDir)) {
+        throw new BadRequestException('Invalid file path');
+      }
       if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
-        await fs.promises.access(path.dirname(file), W_OK);
-        await fs.promises.writeFile(file, raw);
-        return `File uploaded successfully at ${file}`;
+        await fs.promises.access(path.dirname(resolvedPath), W_OK);
+        await fs.promises.writeFile(resolvedPath, raw);
+        // Escape the file path to prevent XSS
+        const safeFile = resolvedPath.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `File uploaded successfully at ${safeFile}`;
       }
     } catch (err) {
       this.logger.error(err.message);
-      throw err.message;
+      throw new BadRequestException(err.message);
     }
+  }
   }
 
   @Get('raw')

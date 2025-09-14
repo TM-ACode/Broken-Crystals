@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import {
   BadRequestException,
   Body,
@@ -163,7 +165,7 @@ export class AuthController {
   })
   async validateWithRSASignatureJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret:process.env.MYSECRET_KEY
     };
   }
 
@@ -299,7 +301,7 @@ export class AuthController {
   })
   async validateWithKIDSqlJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -359,7 +361,7 @@ export class AuthController {
   })
   async validateWithWeakKeyJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -419,7 +421,7 @@ export class AuthController {
   })
   async validateWithJKUJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -479,7 +481,7 @@ export class AuthController {
   })
   async validateWithJWKJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -539,7 +541,7 @@ export class AuthController {
   })
   async validateWithX5CJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -599,7 +601,7 @@ export class AuthController {
   })
   async validateWithX5UJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 
@@ -659,7 +661,7 @@ export class AuthController {
   })
   async validateWithHMACJwt(): Promise<JwtValidationResponse> {
     return {
-      secret: 'this is our secret'
+      secret: process.env.MYSECRET_KEY
     };
   }
 

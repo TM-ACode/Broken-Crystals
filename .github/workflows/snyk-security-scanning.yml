@@ -1,0 +1,22 @@
+name: "SCAN: Snyk Security Scanning (On Push to Stable)"
+
+on:
+  push:
+    branches:
+      - stable
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: snyk/actions/setup@master
+      - name: Snyk SAST Scan
+        continue-on-error: true
+        run: snyk code test --json > snyk_brokencrystals_code.json && snyk code test --sarif > snyk_sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Upload results to Github Code Scanning
+        uses: actions/upload-artifact@v4
+        with:
+            name: snyk-brokencrystals-code
+            path: snyk_brokencrystals_code.json
