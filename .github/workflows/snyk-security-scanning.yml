@@ -12,7 +12,7 @@ jobs:
      
       - name: Install Node + Snyk + snyk-to-html
         run: |
-          npm ci
+          npm ci --force
           npm install -g snyk snyk-to-html
       - name: Run Snyk Open Source Scan
         env:
