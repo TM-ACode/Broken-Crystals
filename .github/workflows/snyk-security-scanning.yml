@@ -9,14 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: snyk/actions/setup@master
-      - name: Snyk SAST Scan
-        continue-on-error: true
-        run: snyk code test --json > snyk_brokencrystals_code.json 
+     
+      - name: Install Node + Snyk + snyk-to-html
+        run: |
+          npm ci
+          npm install -g snyk snyk-to-html
+      - name: Run Snyk Open Source Scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk code test --json | snyk-to-html -o snyk_brokencrystals_code.html 
+       
       - name: Upload results to Github Code Scanning
         uses: actions/upload-artifact@v4
         with:
             name: snyk-brokencrystals-code
-            path: snyk_brokencrystals_code.json
+            path: snyk_brokencrystals_code.html
