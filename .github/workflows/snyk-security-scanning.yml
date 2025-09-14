@@ -12,7 +12,7 @@ jobs:
       - uses: snyk/actions/setup@master
       - name: Snyk SAST Scan
         continue-on-error: true
-        run: snyk code test --json > snyk_brokencrystals_code.json && snyk code test --sarif > snyk_sarif
+        run: snyk code test --json > snyk_brokencrystals_code.json 
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Upload results to Github Code Scanning
