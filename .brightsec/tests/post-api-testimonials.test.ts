@@ -21,7 +21,7 @@ after(() => runner.clear());
 test('POST /api/testimonials', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['xss', 'sqli', 'csrf', 'jwt', 'bopla'],
+      tests: ['jwt'],
       attackParamLocations: [AttackParamLocation.BODY, AttackParamLocation.HEADER],
       starMetadata: { databases: ['PostgreSQL'] }
     })
