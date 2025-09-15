@@ -42,10 +42,9 @@ export class FileService {
   }
 
   private isAllowedHost(hostname: string): boolean {
-    // Define a whitelist of allowed hosts
     const allowedHosts = [
-      'example.com', // Replace with actual allowed hosts
-      'another-allowed-host.com'
+      'metadata.google.internal',
+      '169.254.169.254' // Add more allowed hosts as needed
     ];
     return allowedHosts.includes(hostname);
   }

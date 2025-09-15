@@ -91,7 +91,7 @@ ${xmlNodes.join('\n')}
   }
 
   private sanitizeXpathExpression(expression: string): string {
-    // Basic sanitization logic to escape single quotes
-    return expression.replace(/'/g, "\'");
+    // Use a more robust sanitization method
+    return expression.replace(/['"&<>]/g, '');
   }
 }
