@@ -50,7 +50,7 @@ export class FileController {
 
   private async loadCPFile(cpBaseUrl: string, path: string) {
     if (!path.startsWith(cpBaseUrl)) {
-      throw new BadRequestException(`Invalid paramater 'path' ${path}`);
+      throw new BadRequestException(`Invalid parameter 'path' ${path}`);
     }
 
     const file: Stream = await this.fileService.getFile(path);
@@ -159,6 +159,9 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid path');
+    }
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path
@@ -197,6 +200,9 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid path');
+    }
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
@@ -324,5 +330,11 @@ export class FileController {
       this.logger.error(err.message);
       res.status(HttpStatus.NOT_FOUND);
     }
+  }
+
+  private isValidPath(path: string): boolean {
+    // Implement a whitelist of allowed paths or a regex pattern to validate paths
+    const allowedPaths = ['config/products/crystals/'];
+    return allowedPaths.some(allowedPath => path.startsWith(allowedPath));
   }
 }
