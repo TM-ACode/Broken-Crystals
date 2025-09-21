@@ -8,22 +8,29 @@ jobs:
   snyk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
      
       - name: Install Node + Snyk + snyk-to-html
         run: |
           npm ci --force
           npm install -g snyk snyk-to-html
-
+##     Run snyk sca scanning and snyk code scanning
       - name: Run Snyk dependency-SCA Scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --json  | --fail-on-severity=high snyk-to-html -o snyk_brokencrystals_sca.html 
+        run: snyk test --json  | --fail-on-severity=high snyk-to-html -o snyk_brokencrystals_sca.html
+
+        ##     Run snyk code scanning
+
       - name: Run Snyk Code Scan
+        env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} 
         run: snyk code test --json  | --fail-on-severity=high snyk-to-html -o snyk_brokencrystals_sast.html 
        
       - name: Upload results to Github Code Scanning
         uses: actions/upload-artifact@v4
         with:
-            name: snyk-brokencrystals-code
-            path: snyk_brokencrystals_code.html
+            name: snyk-reports
+            path: |
+              snyk_brokencrystals_sca.html
+              snyk_brokencrystals_sast.html
