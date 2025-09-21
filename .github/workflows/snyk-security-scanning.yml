@@ -14,10 +14,13 @@ jobs:
         run: |
           npm ci --force
           npm install -g snyk snyk-to-html
-      - name: Run Snyk Open Source Scan
+
+      - name: Run Snyk dependency-SCA Scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk code test --json | snyk-to-html -o snyk_brokencrystals_code.html 
+        run: snyk test --json  | --fail-on-severity=high snyk-to-html -o snyk_brokencrystals_sca.html 
+      - name: Run Snyk Code Scan
+        run: snyk code test --json  | --fail-on-severity=high snyk-to-html -o snyk_brokencrystals_sast.html 
        
       - name: Upload results to Github Code Scanning
         uses: actions/upload-artifact@v4
