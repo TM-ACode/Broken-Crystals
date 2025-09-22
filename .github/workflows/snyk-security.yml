@@ -1,0 +1,90 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# A sample workflow which sets up Snyk to analyze the full Snyk platform (Snyk Open Source, Snyk Code,
+# Snyk Container and Snyk Infrastructure as Code)
+# The setup installs the Snyk CLI - for more details on the possible commands
+# check https://docs.snyk.io/snyk-cli/cli-reference
+# The results of Snyk Code are then uploaded to GitHub Security Code Scanning
+#
+# In order to use the Snyk Action you will need to have a Snyk API token.
+# More details in https://github.com/snyk/actions#getting-your-snyk-token
+# or you can signup for free at https://snyk.io/login
+#
+# For more examples, including how to limit scans to only high-severity issues
+# and fail PR checks, see https://github.com/snyk/actions/
+
+name: Snyk Security
+
+on:
+  push:
+    branches: [ "stable" ]
+  pull_request:
+    branches: [ "stable" ]
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Install html converter
+        run: npm install -g snyk-to-html
+
+      - name: Snyk Code test
+        continue-on-error: true
+        run: |
+          snyk code test --fail-on-severity=high --json > code.json || true
+          snyk-to-html -i code.json -o snyk_brokencrystals_sast.html
+
+      - name: Snyk Open Source monitor
+        run: snyk monitor --all-projects
+
+      - name: Snyk Open Source scan
+        continue-on-error: true
+        run: |
+          snyk test --fail-on-severity=high --json > oss.json || true
+          snyk-to-html -i oss.json -o snyk_brokencrystals_oss.html
+
+      - name: Upload HTML reports as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-reports
+          path: |
+            snyk_brokencrystals_oss.html
+            snyk_brokencrystals_sast.html
+
+
+        # Runs Snyk Infrastructure as Code (IaC) analysis and uploads result to Snyk.
+        # Use || true to not fail the pipeline.
+     # - name: Snyk IaC test and report
+      #  run: snyk iac test --report # || true
+
+        # Build the docker image for testing
+      #- name: Build a Docker image
+      #  run: docker build -t your/image-to-test .
+        # Runs Snyk Container (Container and SCA) analysis and uploads result to Snyk.
+     # - name: Snyk Container monitor
+     #   run: snyk container monitor your/image-to-test --file=Dockerfile
+
+        # Push the Snyk Code results into GitHub Code Scanning tab
+    #   - name: Upload result to GitHub Code Scanning
+    #     uses: github/codeql-action/upload-sarif@v3
+    #     with:
+    #       sarif_file: snyk-code.sarif
