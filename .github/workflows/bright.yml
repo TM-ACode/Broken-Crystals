@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 18.x
+      - name: Setup Node.js 18.x for application
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
@@ -27,10 +27,6 @@ jobs:
 
       - name: Start application
         env:
-          CHAT_API_MAX_TOKENS: 200
-          CHAT_API_MODEL: smollm:135m
-          CHAT_API_TOKEN: ""
-          CHAT_API_URL: http://ollama:11434/v1/chat/completions
           KC_BOOTSTRAP_ADMIN_PASSWORD: Pa55w0rd
           KC_BOOTSTRAP_ADMIN_USERNAME: admin
           KC_DB: postgres
@@ -40,17 +36,13 @@ jobs:
           POSTGRES_DB: bc
           POSTGRES_PASSWORD: bc
           POSTGRES_USER: bc
-          URL: http://localhost:3000
         run: docker compose -f compose.local.yml up --wait
 
       - name: Verify application readiness
         run: |
-          until nc -zv 127.0.0.1 3000; do
-            echo "Waiting for application to be ready..."
-            sleep 5
-          done
+          for i in {1..30}; do nc -z 127.0.0.1 3000 && exit 0 || sleep 5; done; exit 1
 
-      - name: Setup Node.js 22.x
+      - name: Setup Node.js 22.x for SecTester
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
