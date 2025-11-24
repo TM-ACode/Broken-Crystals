@@ -12,7 +12,7 @@ import { SafeFilesService, SafeFileResponse } from './safe-files.service';
 @ApiTags('Safe files controller')
 @ApiExcludeController()
 export class SafeFilesController {
-  constructor(private readonly service: SafeFilesService) { }
+  constructor(private readonly service: SafeFilesService) {}
   @Post()
   @ApiOperation({ description: 'Store a new file URL if its host is allowed' })
   @ApiOkResponse({

@@ -10,14 +10,19 @@ const HiddenUpload: FC = () => {
   const [result, setResult] = useState<HiddenUploadResponse | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState('');
-  const [preview, setPreview] = useState<{ content: string; isSvg: boolean } | null>(null);
+  const [preview, setPreview] = useState<{
+    content: string;
+    isSvg: boolean;
+  } | null>(null);
 
   const isImageFile = (file: File) =>
-    file.type.startsWith('image/') || /\.(png|jpe?g|svg)$/i.test(file.name ?? '');
+    file.type.startsWith('image/') ||
+    /\.(png|jpe?g|svg)$/i.test(file.name ?? '');
 
   const buildPreview = (file: File) =>
     new Promise<{ content: string; isSvg: boolean }>((resolve, reject) => {
-      const isSvg = file.type.includes('svg') || /\.svg$/i.test(file.name ?? '');
+      const isSvg =
+        file.type.includes('svg') || /\.svg$/i.test(file.name ?? '');
       const reader = new FileReader();
 
       reader.onload = () => {
@@ -27,7 +32,8 @@ const HiddenUpload: FC = () => {
         }
         resolve({ content: reader.result, isSvg });
       };
-      reader.onerror = () => reject(new Error('Could not read file for preview'));
+      reader.onerror = () =>
+        reject(new Error('Could not read file for preview'));
 
       if (isSvg) {
         reader.readAsText(file);
@@ -59,7 +65,8 @@ const HiddenUpload: FC = () => {
       const nextPreview = await buildPreview(file);
       setPreview(nextPreview);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Could not generate preview';
+      const message =
+        err instanceof Error ? err.message : 'Could not generate preview';
       setError(message);
     }
   };
@@ -119,7 +126,11 @@ const HiddenUpload: FC = () => {
               placeholder="example.svg"
               disabled={uploading}
             />
-            <label className="form-label" htmlFor="hidden-upload-input" style={{ marginTop: 12 }}>
+            <label
+              className="form-label"
+              htmlFor="hidden-upload-input"
+              style={{ marginTop: 12 }}
+            >
               Choose an image
             </label>
             <input
@@ -170,7 +181,13 @@ const HiddenUpload: FC = () => {
               </div>
             )}
 
-            <div style={{ marginTop: 16, display: 'flex', justifyContent: 'flex-end' }}>
+            <div
+              style={{
+                marginTop: 16,
+                display: 'flex',
+                justifyContent: 'flex-end'
+              }}
+            >
               <button
                 type="button"
                 className="btn btn-primary"

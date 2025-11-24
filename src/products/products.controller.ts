@@ -36,7 +36,7 @@ import {
 export class ProductsController {
   private readonly logger = new Logger(ProductsController.name);
 
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   private parseDate(dateString: string): Date {
     const dateParts = dateString.split('-');

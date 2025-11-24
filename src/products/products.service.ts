@@ -15,7 +15,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productsRepository: EntityRepository<Product>,
     private readonly em: EntityManager
-  ) { }
+  ) {}
 
   private sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
