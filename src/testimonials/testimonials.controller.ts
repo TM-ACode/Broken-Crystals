@@ -105,7 +105,9 @@ export class TestimonialsController {
   }
 
   @GrpcMethod('TestimonialsService', 'TestimonialsCount')
-  async testimonialsCountGrpc(data: { query: string }): Promise<{ count: number }> {
+  async testimonialsCountGrpc(data: {
+    query: string;
+  }): Promise<{ count: number }> {
     const count = await this.testimonialsService.count(data.query);
     return { count };
   }

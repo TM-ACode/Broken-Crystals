@@ -240,10 +240,10 @@ async function bootstrap() {
       package: ['products', 'testimonials'],
       protoPath: [
         join(__dirname, 'grpc/products.proto'),
-        join(__dirname, 'grpc/testimonials.proto'),
+        join(__dirname, 'grpc/testimonials.proto')
       ],
-      url: '0.0.0.0:5000',
-    },
+      url: '0.0.0.0:5000'
+    }
   });
 
   await app.startAllMicroservices();
