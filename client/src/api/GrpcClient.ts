@@ -5,7 +5,7 @@ export class GrpcClient {
   private root: protobuf.Root;
 
   private constructor() {
-      this.root = new protobuf.Root();
+    this.root = new protobuf.Root();
   }
 
   public static async getInstance(): Promise<GrpcClient> {
@@ -49,13 +49,22 @@ export class GrpcClient {
     protobuf.parse(testimonialsProto, this.root);
   }
 
-  public async call(packageName: string, service: string, method: string, requestData: any): Promise<any> {
+  public async call(
+    packageName: string,
+    service: string,
+    method: string,
+    requestData: any
+  ): Promise<any> {
     if (!this.root) {
-        await this.loadProtos();
+      await this.loadProtos();
     }
-    
-    const RequestType = this.root.lookupType(packageName + "." + method + "Request");
-    const ResponseType = this.root.lookupType(packageName + "." + method + "Response");
+
+    const RequestType = this.root.lookupType(
+      packageName + '.' + method + 'Request'
+    );
+    const ResponseType = this.root.lookupType(
+      packageName + '.' + method + 'Response'
+    );
 
     const errMsg = RequestType.verify(requestData);
     if (errMsg) throw Error(errMsg);
@@ -68,10 +77,10 @@ export class GrpcClient {
     const frame = new Uint8Array(5 + buffer.length);
     frame[0] = 0;
     const len = buffer.length;
-    frame[1] = (len >> 24) & 0xFF;
-    frame[2] = (len >> 16) & 0xFF;
-    frame[3] = (len >> 8) & 0xFF;
-    frame[4] = len & 0xFF;
+    frame[1] = (len >> 24) & 0xff;
+    frame[2] = (len >> 16) & 0xff;
+    frame[3] = (len >> 8) & 0xff;
+    frame[4] = len & 0xff;
     frame.set(buffer, 5);
 
     const baseUrl = 'http://localhost:8081';
@@ -92,22 +101,26 @@ export class GrpcClient {
 
     const responseBuffer = await response.arrayBuffer();
     const responseData = new Uint8Array(responseBuffer);
-    
+
     let offset = 0;
     while (offset < responseData.length) {
-        const flag = responseData[offset];
-        const length = (responseData[offset + 1] << 24) | (responseData[offset + 2] << 16) | (responseData[offset + 3] << 8) | responseData[offset + 4];
-        
-        if (flag === 0) {
-            // Data frame
-            const data = responseData.slice(offset + 5, offset + 5 + length);
-            return ResponseType.decode(data);
-        } else if (flag === 0x80) {
-            // Trailers, ignore for now
-        }
-        offset += 5 + length;
+      const flag = responseData[offset];
+      const length =
+        (responseData[offset + 1] << 24) |
+        (responseData[offset + 2] << 16) |
+        (responseData[offset + 3] << 8) |
+        responseData[offset + 4];
+
+      if (flag === 0) {
+        // Data frame
+        const data = responseData.slice(offset + 5, offset + 5 + length);
+        return ResponseType.decode(data);
+      } else if (flag === 0x80) {
+        // Trailers, ignore for now
+      }
+      offset += 5 + length;
     }
-    
-    throw new Error("No data found in response");
+
+    throw new Error('No data found in response');
   }
 }

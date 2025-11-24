@@ -368,10 +368,17 @@ export function queryChat(messages: ChatMessage[]): Promise<string> {
 
 export async function viewProductGrpc(productName: string): Promise<any> {
   const client = await GrpcClient.getInstance();
-  return client.call('products', 'ProductsService', 'ViewProduct', { productName });
+  return client.call('products', 'ProductsService', 'ViewProduct', {
+    productName
+  });
 }
 
 export async function getTestimonialsCountGrpc(query: string): Promise<any> {
   const client = await GrpcClient.getInstance();
-  return client.call('testimonials', 'TestimonialsService', 'TestimonialsCount', { query });
+  return client.call(
+    'testimonials',
+    'TestimonialsService',
+    'TestimonialsCount',
+    { query }
+  );
 }

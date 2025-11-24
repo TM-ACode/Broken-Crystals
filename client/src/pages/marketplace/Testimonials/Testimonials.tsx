@@ -1,6 +1,10 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import { getTestimonials, getTestimonialsCount, getTestimonialsCountGrpc } from '../../../api/httpClient';
+import {
+  getTestimonials,
+  getTestimonialsCount,
+  getTestimonialsCountGrpc
+} from '../../../api/httpClient';
 import type { Testimonial } from '../../../interfaces/Testimonial';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -21,14 +25,18 @@ export const Testimonials: FC<Props> = (props: Props) => {
   useEffect(() => {
     getTestimonials().then((data) => setTestimonials(data));
     getTestimonialsCount().then((data) => setTestimonialsCount(data));
-    getTestimonialsCountGrpc('select count(1) as count from testimonial').then((data) => setTestimonialsCountGrpc(data.count));
+    getTestimonialsCountGrpc('select count(1) as count from testimonial').then(
+      (data) => setTestimonialsCountGrpc(data.count)
+    );
   }, []);
 
   useEffect(() => {
     if (newTestimonial) {
       getTestimonials().then((data) => setTestimonials(data));
       getTestimonialsCount().then((data) => setTestimonialsCount(data));
-      getTestimonialsCountGrpc('select count(1) as count from testimonial').then((data) => setTestimonialsCountGrpc(data.count));
+      getTestimonialsCountGrpc(
+        'select count(1) as count from testimonial'
+      ).then((data) => setTestimonialsCountGrpc(data.count));
       return () => setTestimonials([]);
     }
   }, [newTestimonial]);
@@ -37,7 +45,10 @@ export const Testimonials: FC<Props> = (props: Props) => {
     <section id="testimonials" className="testimonials section-bg">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Testimonials (REST: {testimonialsCount}, gRPC: {testimonialsCountGrpc})</h2>
+          <h2>
+            Testimonials (REST: {testimonialsCount}, gRPC:{' '}
+            {testimonialsCountGrpc})
+          </h2>
           <p>
             Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex
             aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos
