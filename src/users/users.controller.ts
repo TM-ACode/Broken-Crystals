@@ -33,7 +33,8 @@ import {
   ApiOperation,
   ApiQuery,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
+  ApiExcludeEndpoint
 } from '@nestjs/swagger';
 import { CreateUserRequest, SignupMode } from './api/CreateUserRequest';
 import { UserDto } from './api/UserDto';
@@ -518,6 +519,7 @@ export class UsersController {
 
   @Get('/me')
   @UseGuards(AuthGuard)
+  @ApiExcludeEndpoint()
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
     description: SWAGGER_DESC_GET_SELF
@@ -555,6 +557,7 @@ export class UsersController {
   @Put('/me')
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
+  @ApiExcludeEndpoint()
   @SerializeOptions({ groups: [FULL_USER_INFO] })
   @ApiOperation({
     description: SWAGGER_DESC_UPDATE_SELF
