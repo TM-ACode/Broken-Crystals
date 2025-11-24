@@ -83,7 +83,7 @@ export class GrpcClient {
     frame[4] = len & 0xff;
     frame.set(buffer, 5);
 
-    const baseUrl = 'http://localhost:8081';
+    const baseUrl = import.meta.env.VITE_GRPC_URL || 'http://localhost:8081';
     const url = `${baseUrl}/${packageName}.${service}/${method}`;
 
     const response = await fetch(url, {
