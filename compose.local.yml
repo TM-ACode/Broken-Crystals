@@ -78,6 +78,7 @@ services:
       CHAT_API_MAX_TOKENS: 200
     ports:
       - '3000:3000'
+      - '5000:5000'
     logging:
       options:
         max-file: '5'
@@ -91,6 +92,15 @@ services:
         condition: service_healthy
       ollama:
         condition: service_healthy
+
+  envoy:
+    image: envoyproxy/envoy:v1.22.0
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "8081:8080"
+    depends_on:
+      - nodejs
 
   mailcatcher:
     image: 'sj26/mailcatcher'

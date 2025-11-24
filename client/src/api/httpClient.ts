@@ -8,6 +8,7 @@ import type { OidcClient } from '../interfaces/Auth';
 import type { ChatMessage } from '../interfaces/ChatMessage';
 import { ApiUrl } from './ApiUrl';
 import { makeApiRequest } from './makeApiRequest';
+import { GrpcClient } from './GrpcClient';
 import type { HiddenUploadResponse } from '../interfaces/HiddenUploadResponse';
 
 function formatDateToYYYYMMDD(date: Date): string {
@@ -363,4 +364,14 @@ export function queryChat(messages: ChatMessage[]): Promise<string> {
   }).then((res) => {
     return typeof res === 'string' ? res : '';
   });
+}
+
+export async function viewProductGrpc(productName: string): Promise<any> {
+  const client = await GrpcClient.getInstance();
+  return client.call('products', 'ProductsService', 'ViewProduct', { productName });
+}
+
+export async function getTestimonialsCountGrpc(query: string): Promise<any> {
+  const client = await GrpcClient.getInstance();
+  return client.call('testimonials', 'TestimonialsService', 'TestimonialsCount', { query });
 }

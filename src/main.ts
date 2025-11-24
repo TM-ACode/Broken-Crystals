@@ -20,6 +20,7 @@ import fastify from 'fastify';
 import { fastifyStatic, ListRender } from '@fastify/static';
 import { join, dirname } from 'path';
 import rawbody from 'raw-body';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 
 const renderDirList: ListRender = (dirs, files) => {
   const currDir = dirname((dirs[0] || files[0]).href);
@@ -233,6 +234,19 @@ async function bootstrap() {
 
   SwaggerModule.setup('swagger', app, document);
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: ['products', 'testimonials'],
+      protoPath: [
+        join(__dirname, 'grpc/products.proto'),
+        join(__dirname, 'grpc/testimonials.proto'),
+      ],
+      url: '0.0.0.0:5000',
+    },
+  });
+
+  await app.startAllMicroservices();
   await app.listen(3000, '0.0.0.0');
 }
 

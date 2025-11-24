@@ -8,6 +8,7 @@ import {
   Query,
   BadRequestException
 } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import {
   ApiOperation,
   ApiOkResponse,
@@ -164,5 +165,12 @@ export class ProductsController {
         location: __filename
       });
     }
+  }
+
+  @GrpcMethod('ProductsService', 'ViewProduct')
+  async viewProductGrpc(data: { productName: string }): Promise<{ success: boolean }> {
+    const query = `UPDATE product SET views_count = views_count + 1 WHERE name = '${data.productName}'`;
+    await this.productsService.updateProduct(query);
+    return { success: true };
   }
 }

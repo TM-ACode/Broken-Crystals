@@ -12,6 +12,14 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true
+      },
+      '/products.ProductsService': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/testimonials.TestimonialsService': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
       }
     }
   },
