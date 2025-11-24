@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Product } from '../../interfaces/Product';
-import { viewProduct } from '../../api/httpClient';
+import { viewProduct, viewProductGrpc } from '../../api/httpClient';
 
 interface Props {
   product: Product;
@@ -18,6 +18,9 @@ export const ProductView: FC<Props> = (props: Props) => {
           className="img-fluid"
           alt=""
           onLoad={() => viewProduct(props.product.name)}
+          onClick={() => viewProductGrpc(props.product.name)}
+          style={{ cursor: 'pointer' }}
+          title="Click to trigger gRPC view count"
         />
         <div className="portfolio-info">
           <h4>{props.product.name}</h4>

@@ -3,12 +3,13 @@ import { AuthModule } from '../auth/auth.module';
 import { OrmModule } from '../orm/orm.module';
 import { UsersModule } from '../users/users.module';
 import { TestimonialsController } from './testimonials.controller';
+import { TestimonialsGrpcController } from '../grpc/testimonials.grpc.controller';
 import { TestimonialsResolver } from './testimonials.resolver';
 import { TestimonialsService } from './testimonials.service';
 
 @Module({
   imports: [OrmModule, AuthModule, UsersModule],
-  controllers: [TestimonialsController],
+  controllers: [TestimonialsController, TestimonialsGrpcController],
   providers: [TestimonialsService, TestimonialsResolver],
   exports: [TestimonialsService],
 })

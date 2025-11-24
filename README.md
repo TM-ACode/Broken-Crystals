@@ -12,6 +12,7 @@ The application contains:
   - Swagger UI - http://localhost:8090/swagger
   - Swagger JSON file - http://localhost:8090/swagger-json
   - GraphiQL UI - http://localhost:8090/graphiql
+  - gRPC Server - 0.0.0.0:5000 (mimics GraphQL endpoints)
 - nginx web server that serves the client and acts as a reverse proxy for the server's API requests
 
 > **Note**
@@ -98,6 +99,14 @@ Full configuration & usage examples can be found in our [demo project](https://g
 * **Headers Security Check** - The application is configured with misconfigured security headers. The list of headers is available in the headers.configurator.interceptor.ts file. A user can pass the _no-sec-headers_ query param to any API to prevent the server from sending the headers.
 
 * **HTML Injection** - Both forms testimonial and mailing list subscription forms allow HTML injection.
+
+* **SQL Injection**
+  - **GraphQL** - The application exposes GraphQL endpoints that are vulnerable to SQL Injection.
+    - `viewProduct` mutation
+    - `testimonialsCount` query
+  - **gRPC** - The application exposes gRPC endpoints over HTTP/2 that mimic the GraphQL functionality and are also vulnerable to SQL Injection.
+    - `ViewProduct` RPC
+    - `TestimonialsCount` RPC
 
 * **CSS Injection** - The login page is vulnerable to CSS Injections through a url parameter: https://brokencrystals.com/userlogin?logobgcolor=transparent.
 

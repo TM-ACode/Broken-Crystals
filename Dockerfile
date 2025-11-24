@@ -1,10 +1,10 @@
-FROM node:14
+FROM node:18
 
 WORKDIR /var/www/
 
 COPY package*.json ./
 
-RUN npm ci -q
+RUN npm ci --legacy-peer-deps -q
 
 COPY config ./config
 COPY tsconfig.build.json ./
@@ -14,7 +14,7 @@ COPY .env ./
 COPY src ./src
 
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --production --legacy-peer-deps
 
 RUN chown -R node:node /var/www/*
 
@@ -23,5 +23,6 @@ USER node
 ENV NODE_ENV=production
 
 EXPOSE 3000
+EXPOSE 5000
 
 CMD ["npm", "run", "start:prod"]

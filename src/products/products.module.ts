@@ -3,12 +3,13 @@ import { AuthModule } from '../auth/auth.module';
 import { OrmModule } from '../orm/orm.module';
 import { UsersModule } from '../users/users.module';
 import { ProductsController } from './products.controller';
+import { ProductsGrpcController } from '../grpc/products.grpc.controller';
 import { ProductsService } from './products.service';
 import { ProductsResolver } from './products.resolver';
 
 @Module({
   imports: [OrmModule, AuthModule, UsersModule],
-  controllers: [ProductsController],
+  controllers: [ProductsController, ProductsGrpcController],
   providers: [ProductsService, ProductsResolver],
   exports: [ProductsService],
 })

@@ -9,5 +9,7 @@ export enum ApiUrl {
   Goto = '/api/goto',
   Render = '/api/render',
   Spawn = '/api/spawn',
-  File = '/api/file'
+  File = '/api/file',
+  GrpcProducts = '/api/grpc-bridge/view-product',
+  GrpcTestimonials = '/api/grpc-bridge/testimonials-count'
 }

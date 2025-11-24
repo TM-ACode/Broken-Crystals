@@ -17,6 +17,8 @@ import * as http from 'http';
 import * as https from 'https';
 import fastify from 'fastify';
 import * as rawbody from 'raw-body';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
   http.globalAgent.maxSockets = Infinity;
@@ -31,6 +33,18 @@ async function bootstrap() {
       logger: process.env.NODE_ENV === 'production' ? ['error'] : ['debug'],
     },
   );
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: ['products', 'testimonials'],
+      protoPath: [
+        join(__dirname, 'grpc/products.proto'),
+        join(__dirname, 'grpc/testimonials.proto'),
+      ],
+      url: '0.0.0.0:5000',
+    },
+  });
 
   await server.register(fastifyCookie);
   await server.register(fmp);
@@ -91,6 +105,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('swagger', app, document);
 
+  await app.startAllMicroservices();
   await app.listen(3000, '0.0.0.0');
 }
 

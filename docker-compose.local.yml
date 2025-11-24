@@ -36,6 +36,7 @@ services:
       URL: http://localhost:3000
     ports:
      - '3000:3000'
+     - '5000:5000'
     logging:
       options:
         max-file: '5'
@@ -49,5 +50,14 @@ services:
       dockerfile: Dockerfile.local
     ports:
       - 8090:80
+    depends_on:
+      - nodejs
+
+  envoy:
+    image: envoyproxy/envoy:v1.22.0
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "8081:8080"
     depends_on:
       - nodejs

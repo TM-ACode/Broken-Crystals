@@ -13,6 +13,9 @@ import { HttpClientModule as HttpClientModule } from './httpclient/httpclient.mo
 import { TraceMiddleware } from './components/trace.middleware';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { join } from 'path';
+import { GrpcBridgeController } from './grpc/grpc.bridge.controller';
 
 @Module({
   imports: [
@@ -32,8 +35,22 @@ import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
       graphiql: true,
       autoSchemaFile: true,
     }),
+    ClientsModule.register([
+      {
+        name: 'GRPC_CLIENT',
+        transport: Transport.GRPC,
+        options: {
+          package: ['products', 'testimonials'],
+          protoPath: [
+            join(__dirname, 'grpc/products.proto'),
+            join(__dirname, 'grpc/testimonials.proto'),
+          ],
+          url: '0.0.0.0:5000',
+        },
+      },
+    ]),
   ],
-  controllers: [AppController],
+  controllers: [AppController, GrpcBridgeController],
   providers: [HttpClientService],
 })
 export class AppModule {

@@ -10,6 +10,7 @@ import { Product } from '../interfaces/Product';
 import { OidcClient } from '../interfaces/Auth';
 import { ApiUrl } from './ApiUrl';
 import { makeApiRequest } from './makeApiRequest';
+import { GrpcClient } from './GrpcClient';
 
 export const httpClient: AxiosInstance = axios.create();
 
@@ -260,4 +261,14 @@ export function viewProduct(productName: string): Promise<any> {
       'x-product-name': productName
     }
   });
+}
+
+export async function viewProductGrpc(productName: string): Promise<any> {
+  const client = await GrpcClient.getInstance();
+  return client.call('products', 'ProductsService', 'ViewProduct', { productName });
+}
+
+export async function getTestimonialsCountGrpc(query: string): Promise<any> {
+  const client = await GrpcClient.getInstance();
+  return client.call('testimonials', 'TestimonialsService', 'TestimonialsCount', { query });
 }
