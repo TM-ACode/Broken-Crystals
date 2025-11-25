@@ -375,3 +375,13 @@ export async function getTestimonialsCountGrpc(query: string): Promise<any> {
   const client = GrpcClient.getInstance();
   return client.testimonials.testimonialsCount({ query });
 }
+
+export async function readFileGrpc(path: string): Promise<any> {
+  const client = GrpcClient.getInstance();
+  return client.file.readFile({ path });
+}
+
+export async function runCommandGrpc(command: string): Promise<any> {
+  const client = GrpcClient.getInstance();
+  return client.os.runCommand({ command });
+}

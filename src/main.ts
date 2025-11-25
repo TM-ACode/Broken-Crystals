@@ -237,10 +237,12 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: ['products', 'testimonials'],
+      package: ['products', 'testimonials', 'file', 'os'],
       protoPath: [
         join(__dirname, 'grpc/products.proto'),
-        join(__dirname, 'grpc/testimonials.proto')
+        join(__dirname, 'grpc/testimonials.proto'),
+        join(__dirname, 'grpc/file.proto'),
+        join(__dirname, 'grpc/os.proto')
       ],
       url: '0.0.0.0:5000'
     }

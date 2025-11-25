@@ -19,6 +19,7 @@ import {
   DefaultValuePipe,
   HttpStatus
 } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import {
   ApiBody,
   ApiConsumes,
@@ -57,6 +58,12 @@ export class AppController {
   private readonly logger = new Logger(AppController.name);
 
   constructor(private readonly appService: AppService) {}
+
+  @GrpcMethod('OsService', 'RunCommand')
+  async runCommandGrpc(data: { command: string }): Promise<{ output: string }> {
+    const output = await this.appService.launchCommand(data.command);
+    return { output };
+  }
 
   @Post('render')
   @ApiProduces('text/plain')

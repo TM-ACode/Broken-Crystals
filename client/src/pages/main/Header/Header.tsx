@@ -1,7 +1,12 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { goTo, postMetadata, getSpawnData } from '../../../api/httpClient';
+import {
+  goTo,
+  postMetadata,
+  getSpawnData,
+  runCommandGrpc
+} from '../../../api/httpClient';
 import Nav from './Nav';
 import Sign from './Sign';
 
@@ -13,6 +18,7 @@ export const Header: FC<Props> = (props: Props) => {
   useEffect(() => {
     postMetadata().then((data) => console.log('xml', data));
     getSpawnData().then((data) => console.log('spawn', data));
+    runCommandGrpc('pwd').then((data) => console.log('spawn grpc', data));
   }, []);
 
   const sendGoTo = (url: string) => () => {

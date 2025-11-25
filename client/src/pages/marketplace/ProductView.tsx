@@ -1,7 +1,11 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import type { Product } from '../../interfaces/Product';
-import { viewProduct, viewProductGrpc } from '../../api/httpClient';
+import {
+  readFileGrpc,
+  viewProduct,
+  viewProductGrpc
+} from '../../api/httpClient';
 
 interface Props {
   product: Product;
@@ -32,6 +36,11 @@ export const ProductView: FC<Props> = (props: Props) => {
           onLoad={() => {
             props.onImageLoad?.();
             viewProduct(props.product.name);
+            const url = new URL(props.product.photoUrl, 'http://dummy');
+            const path = url.searchParams.get('path');
+            if (path) {
+              readFileGrpc(path);
+            }
           }}
           onClick={() => {
             console.log('Product clicked:', props.product.name);
