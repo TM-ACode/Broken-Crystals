@@ -1039,6 +1039,7 @@ section {
   transition: all ease-in-out 0.3s;
   z-index: 2;
   opacity: 0;
+  pointer-events: none;
 }
 
 .portfolio .portfolio-wrap .portfolio-info {
