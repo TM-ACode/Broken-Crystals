@@ -5,10 +5,10 @@
 // source: testimonials.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import type { CallContext, CallOptions } from "nice-grpc-common";
+import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
+import type { CallContext, CallOptions } from 'nice-grpc-common';
 
-export const protobufPackage = "testimonials";
+export const protobufPackage = 'testimonials';
 
 export interface TestimonialsCountRequest {
   query: string;
@@ -19,19 +19,26 @@ export interface TestimonialsCountResponse {
 }
 
 function createBaseTestimonialsCountRequest(): TestimonialsCountRequest {
-  return { query: "" };
+  return { query: '' };
 }
 
 export const TestimonialsCountRequest: MessageFns<TestimonialsCountRequest> = {
-  encode(message: TestimonialsCountRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.query !== "") {
+  encode(
+    message: TestimonialsCountRequest,
+    writer: BinaryWriter = new BinaryWriter()
+  ): BinaryWriter {
+    if (message.query !== '') {
       writer.uint32(10).string(message.query);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): TestimonialsCountRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number
+  ): TestimonialsCountRequest {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTestimonialsCountRequest();
     while (reader.pos < end) {
@@ -55,126 +62,161 @@ export const TestimonialsCountRequest: MessageFns<TestimonialsCountRequest> = {
   },
 
   fromJSON(object: any): TestimonialsCountRequest {
-    return { query: isSet(object.query) ? globalThis.String(object.query) : "" };
+    return {
+      query: isSet(object.query) ? globalThis.String(object.query) : ''
+    };
   },
 
   toJSON(message: TestimonialsCountRequest): unknown {
     const obj: any = {};
-    if (message.query !== "") {
+    if (message.query !== '') {
       obj.query = message.query;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TestimonialsCountRequest>, I>>(base?: I): TestimonialsCountRequest {
+  create<I extends Exact<DeepPartial<TestimonialsCountRequest>, I>>(
+    base?: I
+  ): TestimonialsCountRequest {
     return TestimonialsCountRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TestimonialsCountRequest>, I>>(object: I): TestimonialsCountRequest {
+  fromPartial<I extends Exact<DeepPartial<TestimonialsCountRequest>, I>>(
+    object: I
+  ): TestimonialsCountRequest {
     const message = createBaseTestimonialsCountRequest();
-    message.query = object.query ?? "";
+    message.query = object.query ?? '';
     return message;
-  },
+  }
 };
 
 function createBaseTestimonialsCountResponse(): TestimonialsCountResponse {
   return { count: 0 };
 }
 
-export const TestimonialsCountResponse: MessageFns<TestimonialsCountResponse> = {
-  encode(message: TestimonialsCountResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.count !== 0) {
-      writer.uint32(8).int32(message.count);
-    }
-    return writer;
-  },
+export const TestimonialsCountResponse: MessageFns<TestimonialsCountResponse> =
+  {
+    encode(
+      message: TestimonialsCountResponse,
+      writer: BinaryWriter = new BinaryWriter()
+    ): BinaryWriter {
+      if (message.count !== 0) {
+        writer.uint32(8).int32(message.count);
+      }
+      return writer;
+    },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): TestimonialsCountResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTestimonialsCountResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
+    decode(
+      input: BinaryReader | Uint8Array,
+      length?: number
+    ): TestimonialsCountResponse {
+      const reader =
+        input instanceof BinaryReader ? input : new BinaryReader(input);
+      const end = length === undefined ? reader.len : reader.pos + length;
+      const message = createBaseTestimonialsCountResponse();
+      while (reader.pos < end) {
+        const tag = reader.uint32();
+        switch (tag >>> 3) {
+          case 1: {
+            if (tag !== 8) {
+              break;
+            }
+
+            message.count = reader.int32();
+            continue;
           }
-
-          message.count = reader.int32();
-          continue;
         }
+        if ((tag & 7) === 4 || tag === 0) {
+          break;
+        }
+        reader.skip(tag & 7);
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
+      return message;
+    },
+
+    fromJSON(object: any): TestimonialsCountResponse {
+      return {
+        count: isSet(object.count) ? globalThis.Number(object.count) : 0
+      };
+    },
+
+    toJSON(message: TestimonialsCountResponse): unknown {
+      const obj: any = {};
+      if (message.count !== 0) {
+        obj.count = Math.round(message.count);
       }
-      reader.skip(tag & 7);
+      return obj;
+    },
+
+    create<I extends Exact<DeepPartial<TestimonialsCountResponse>, I>>(
+      base?: I
+    ): TestimonialsCountResponse {
+      return TestimonialsCountResponse.fromPartial(base ?? ({} as any));
+    },
+    fromPartial<I extends Exact<DeepPartial<TestimonialsCountResponse>, I>>(
+      object: I
+    ): TestimonialsCountResponse {
+      const message = createBaseTestimonialsCountResponse();
+      message.count = object.count ?? 0;
+      return message;
     }
-    return message;
-  },
+  };
 
-  fromJSON(object: any): TestimonialsCountResponse {
-    return { count: isSet(object.count) ? globalThis.Number(object.count) : 0 };
-  },
-
-  toJSON(message: TestimonialsCountResponse): unknown {
-    const obj: any = {};
-    if (message.count !== 0) {
-      obj.count = Math.round(message.count);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<TestimonialsCountResponse>, I>>(base?: I): TestimonialsCountResponse {
-    return TestimonialsCountResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<TestimonialsCountResponse>, I>>(object: I): TestimonialsCountResponse {
-    const message = createBaseTestimonialsCountResponse();
-    message.count = object.count ?? 0;
-    return message;
-  },
-};
-
-export type TestimonialsServiceDefinition = typeof TestimonialsServiceDefinition;
+export type TestimonialsServiceDefinition =
+  typeof TestimonialsServiceDefinition;
 export const TestimonialsServiceDefinition = {
-  name: "TestimonialsService",
-  fullName: "testimonials.TestimonialsService",
+  name: 'TestimonialsService',
+  fullName: 'testimonials.TestimonialsService',
   methods: {
     testimonialsCount: {
-      name: "TestimonialsCount",
+      name: 'TestimonialsCount',
       requestType: TestimonialsCountRequest,
       requestStream: false,
       responseType: TestimonialsCountResponse,
       responseStream: false,
-      options: {},
-    },
-  },
+      options: {}
+    }
+  }
 } as const;
 
 export interface TestimonialsServiceImplementation<CallContextExt = {}> {
   testimonialsCount(
     request: TestimonialsCountRequest,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<TestimonialsCountResponse>>;
 }
 
 export interface TestimonialsServiceClient<CallOptionsExt = {}> {
   testimonialsCount(
     request: DeepPartial<TestimonialsCountRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<TestimonialsCountResponse>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends globalThis.Array<infer U>
+    ? globalThis.Array<DeepPartial<U>>
+    : T extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : T extends {}
+        ? { [K in keyof T]?: DeepPartial<T[K]> }
+        : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

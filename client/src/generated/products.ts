@@ -5,10 +5,10 @@
 // source: products.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import type { CallContext, CallOptions } from "nice-grpc-common";
+import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
+import type { CallContext, CallOptions } from 'nice-grpc-common';
 
-export const protobufPackage = "products";
+export const protobufPackage = 'products';
 
 export interface ViewProductRequest {
   productName: string;
@@ -19,19 +19,26 @@ export interface ViewProductResponse {
 }
 
 function createBaseViewProductRequest(): ViewProductRequest {
-  return { productName: "" };
+  return { productName: '' };
 }
 
 export const ViewProductRequest: MessageFns<ViewProductRequest> = {
-  encode(message: ViewProductRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.productName !== "") {
+  encode(
+    message: ViewProductRequest,
+    writer: BinaryWriter = new BinaryWriter()
+  ): BinaryWriter {
+    if (message.productName !== '') {
       writer.uint32(10).string(message.productName);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ViewProductRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number
+  ): ViewProductRequest {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseViewProductRequest();
     while (reader.pos < end) {
@@ -55,25 +62,33 @@ export const ViewProductRequest: MessageFns<ViewProductRequest> = {
   },
 
   fromJSON(object: any): ViewProductRequest {
-    return { productName: isSet(object.productName) ? globalThis.String(object.productName) : "" };
+    return {
+      productName: isSet(object.productName)
+        ? globalThis.String(object.productName)
+        : ''
+    };
   },
 
   toJSON(message: ViewProductRequest): unknown {
     const obj: any = {};
-    if (message.productName !== "") {
+    if (message.productName !== '') {
       obj.productName = message.productName;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ViewProductRequest>, I>>(base?: I): ViewProductRequest {
+  create<I extends Exact<DeepPartial<ViewProductRequest>, I>>(
+    base?: I
+  ): ViewProductRequest {
     return ViewProductRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ViewProductRequest>, I>>(object: I): ViewProductRequest {
+  fromPartial<I extends Exact<DeepPartial<ViewProductRequest>, I>>(
+    object: I
+  ): ViewProductRequest {
     const message = createBaseViewProductRequest();
-    message.productName = object.productName ?? "";
+    message.productName = object.productName ?? '';
     return message;
-  },
+  }
 };
 
 function createBaseViewProductResponse(): ViewProductResponse {
@@ -81,15 +96,22 @@ function createBaseViewProductResponse(): ViewProductResponse {
 }
 
 export const ViewProductResponse: MessageFns<ViewProductResponse> = {
-  encode(message: ViewProductResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: ViewProductResponse,
+    writer: BinaryWriter = new BinaryWriter()
+  ): BinaryWriter {
     if (message.success !== false) {
       writer.uint32(8).bool(message.success);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ViewProductResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number
+  ): ViewProductResponse {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseViewProductResponse();
     while (reader.pos < end) {
@@ -113,7 +135,11 @@ export const ViewProductResponse: MessageFns<ViewProductResponse> = {
   },
 
   fromJSON(object: any): ViewProductResponse {
-    return { success: isSet(object.success) ? globalThis.Boolean(object.success) : false };
+    return {
+      success: isSet(object.success)
+        ? globalThis.Boolean(object.success)
+        : false
+    };
   },
 
   toJSON(message: ViewProductResponse): unknown {
@@ -124,57 +150,75 @@ export const ViewProductResponse: MessageFns<ViewProductResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ViewProductResponse>, I>>(base?: I): ViewProductResponse {
+  create<I extends Exact<DeepPartial<ViewProductResponse>, I>>(
+    base?: I
+  ): ViewProductResponse {
     return ViewProductResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ViewProductResponse>, I>>(object: I): ViewProductResponse {
+  fromPartial<I extends Exact<DeepPartial<ViewProductResponse>, I>>(
+    object: I
+  ): ViewProductResponse {
     const message = createBaseViewProductResponse();
     message.success = object.success ?? false;
     return message;
-  },
+  }
 };
 
 export type ProductsServiceDefinition = typeof ProductsServiceDefinition;
 export const ProductsServiceDefinition = {
-  name: "ProductsService",
-  fullName: "products.ProductsService",
+  name: 'ProductsService',
+  fullName: 'products.ProductsService',
   methods: {
     viewProduct: {
-      name: "ViewProduct",
+      name: 'ViewProduct',
       requestType: ViewProductRequest,
       requestStream: false,
       responseType: ViewProductResponse,
       responseStream: false,
-      options: {},
-    },
-  },
+      options: {}
+    }
+  }
 } as const;
 
 export interface ProductsServiceImplementation<CallContextExt = {}> {
   viewProduct(
     request: ViewProductRequest,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<ViewProductResponse>>;
 }
 
 export interface ProductsServiceClient<CallOptionsExt = {}> {
   viewProduct(
     request: DeepPartial<ViewProductRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<ViewProductResponse>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends globalThis.Array<infer U>
+    ? globalThis.Array<DeepPartial<U>>
+    : T extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : T extends {}
+        ? { [K in keyof T]?: DeepPartial<T[K]> }
+        : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
