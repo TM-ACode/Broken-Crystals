@@ -65,6 +65,15 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
     command: --interval 300 --debug
 
+  envoy:
+    image: envoyproxy/envoy:v1.22.0
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - '8081:8080'
+    depends_on:
+      - nodejs
+
   keycloak-db:
     image: 'postgres:17-alpine'
     environment:
