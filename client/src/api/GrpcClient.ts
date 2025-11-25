@@ -1,11 +1,11 @@
 import { createClient, createChannel } from 'nice-grpc-web';
 import {
   ProductsServiceDefinition,
-  ProductsServiceClient
+  type ProductsServiceClient
 } from '../generated/products';
 import {
   TestimonialsServiceDefinition,
-  TestimonialsServiceClient
+  type TestimonialsServiceClient
 } from '../generated/testimonials';
 
 export class GrpcClient {
