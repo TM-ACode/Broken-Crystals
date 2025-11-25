@@ -33,7 +33,10 @@ export const ProductView: FC<Props> = (props: Props) => {
             props.onImageLoad?.();
             viewProduct(props.product.name);
           }}
-          onClick={() => viewProductGrpc(props.product.name)}
+          onClick={() => {
+            console.log('Product clicked:', props.product.name);
+            viewProductGrpc(props.product.name);
+          }}
           style={{ cursor: 'pointer' }}
           title="Click to trigger gRPC view count"
         />

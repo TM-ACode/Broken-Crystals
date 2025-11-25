@@ -1051,6 +1051,7 @@ section {
   text-align: center;
   z-index: 3;
   transition: all ease-in-out 0.3s;
+  pointer-events: none;
 }
 
 .portfolio .portfolio-wrap .portfolio-info h4 {
@@ -1074,6 +1075,7 @@ section {
   z-index: 3;
   position: absolute;
   transition: all ease-in-out 0.3s;
+  pointer-events: none;
 }
 
 .portfolio .portfolio-wrap .portfolio-links a {
@@ -1082,6 +1084,7 @@ section {
   font-size: 28px;
   display: inline-block;
   transition: 0.3s;
+  pointer-events: auto;
 }
 
 .portfolio .portfolio-wrap .portfolio-links a:hover {
