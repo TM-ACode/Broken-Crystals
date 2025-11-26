@@ -20,6 +20,14 @@ export default defineConfig({
       '/testimonials.TestimonialsService': {
         target: 'http://localhost:8081',
         changeOrigin: true
+      },
+      '/file.FileService': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/os.OsService': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
       }
     }
   },
