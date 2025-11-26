@@ -6,7 +6,9 @@ import {
   Headers,
   InternalServerErrorException,
   Query,
-  BadRequestException
+  BadRequestException,
+  HttpException,
+  HttpStatus
 } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
@@ -133,9 +135,15 @@ export class ProductsController {
     if (!name) {
       throw new BadRequestException('Product name is required');
     }
-
-    const products = await this.productsService.searchByName(name);
-    return products.map((p: Product) => new ProductDto(p));
+    try {
+      const products = await this.productsService.searchByName(name);
+      return products.map((p: Product) => new ProductDto(p));
+    } catch (err) {
+      throw new HttpException(
+        { statusCode: HttpStatus.OK, error: err.message },
+        HttpStatus.OK
+      );
+    }
   }
 
   @Get('views')
