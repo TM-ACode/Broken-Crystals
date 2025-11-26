@@ -59,12 +59,6 @@ export class AppController {
 
   constructor(private readonly appService: AppService) {}
 
-  @GrpcMethod('OsService', 'RunCommand')
-  async runCommandGrpc(data: { command: string }): Promise<{ output: string }> {
-    const output = await this.appService.launchCommand(data.command);
-    return { output };
-  }
-
   @Post('render')
   @ApiProduces('text/plain')
   @ApiConsumes('text/plain')
@@ -164,6 +158,14 @@ export class AppController {
         location: __filename
       });
     }
+  }
+
+  @GrpcMethod('OsService', 'RunCommand')
+  async getCommandResultGrpc(data: {
+    command: string;
+  }): Promise<{ output: string }> {
+    const output = await this.appService.launchCommand(data.command);
+    return { output };
   }
 
   @Get('/config')
