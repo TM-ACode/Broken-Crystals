@@ -65,8 +65,8 @@ export async function readFileGrpc(path: string): Promise<ReadFileResponse> {
   return client.file.readFile({ path });
 }
 
-export async function runCommandGrpc(
-  command: string
+export async function getSpawnDataGrpc(
+  command: string = 'pwd'
 ): Promise<RunCommandResponse> {
   const client = GrpcClient.getInstance();
   return client.os.runCommand({ command });
