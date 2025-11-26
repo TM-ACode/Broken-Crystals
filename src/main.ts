@@ -234,16 +234,18 @@ async function bootstrap() {
 
   SwaggerModule.setup('swagger', app, document);
 
+  const grpcDir = join(__dirname, 'grpc');
+  const protoFiles = readdirSync(grpcDir).filter((file) =>
+    file.endsWith('.proto')
+  );
+  const protoPackages = protoFiles.map((file) => file.replace('.proto', ''));
+  const protoPaths = protoFiles.map((file) => join(grpcDir, file));
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: ['products', 'testimonials', 'file', 'os'],
-      protoPath: [
-        join(__dirname, 'grpc/products.proto'),
-        join(__dirname, 'grpc/testimonials.proto'),
-        join(__dirname, 'grpc/file.proto'),
-        join(__dirname, 'grpc/os.proto')
-      ],
+      package: protoPackages,
+      protoPath: protoPaths,
       url: '0.0.0.0:5000'
     }
   });
