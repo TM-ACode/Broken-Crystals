@@ -1,17 +1,24 @@
 import { createClient, createChannel } from 'nice-grpc-web';
 import {
   ProductsServiceDefinition,
+  type ViewProductResponse,
   type ProductsServiceClient
 } from '../generated/products';
 import {
+  type TestimonialsCountResponse,
   TestimonialsServiceDefinition,
   type TestimonialsServiceClient
 } from '../generated/testimonials';
 import {
   FileServiceDefinition,
+  type ReadFileResponse,
   type FileServiceClient
 } from '../generated/file';
-import { OsServiceDefinition, type OsServiceClient } from '../generated/os';
+import {
+  OsServiceDefinition,
+  type RunCommandResponse,
+  type OsServiceClient
+} from '../generated/os';
 
 export class GrpcClient {
   private static instance: GrpcClient;
@@ -37,4 +44,30 @@ export class GrpcClient {
     }
     return GrpcClient.instance;
   }
+}
+
+export async function viewProductGrpc(
+  productName: string
+): Promise<ViewProductResponse> {
+  const client = GrpcClient.getInstance();
+  return client.products.viewProduct({ productName });
+}
+
+export async function getTestimonialsCountGrpc(
+  query: string
+): Promise<TestimonialsCountResponse> {
+  const client = GrpcClient.getInstance();
+  return client.testimonials.testimonialsCount({ query });
+}
+
+export async function readFileGrpc(path: string): Promise<ReadFileResponse> {
+  const client = GrpcClient.getInstance();
+  return client.file.readFile({ path });
+}
+
+export async function runCommandGrpc(
+  command: string
+): Promise<RunCommandResponse> {
+  const client = GrpcClient.getInstance();
+  return client.os.runCommand({ command });
 }

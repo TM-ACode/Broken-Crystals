@@ -1,11 +1,8 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
+import { readFileGrpc, viewProductGrpc } from '../../api/GrpcClient';
+import { viewProduct } from '../../api/httpClient';
 import type { Product } from '../../interfaces/Product';
-import {
-  readFileGrpc,
-  viewProduct,
-  viewProductGrpc
-} from '../../api/httpClient';
 
 interface Props {
   product: Product;

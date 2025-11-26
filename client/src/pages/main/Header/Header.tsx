@@ -1,12 +1,8 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  goTo,
-  postMetadata,
-  getSpawnData,
-  runCommandGrpc
-} from '../../../api/httpClient';
+import { runCommandGrpc } from '../../../api/GrpcClient';
+import { goTo, postMetadata, getSpawnData } from '../../../api/httpClient';
 import Nav from './Nav';
 import Sign from './Sign';
 

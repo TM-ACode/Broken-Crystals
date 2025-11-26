@@ -1,10 +1,7 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import {
-  getTestimonials,
-  getTestimonialsCount,
-  getTestimonialsCountGrpc
-} from '../../../api/httpClient';
+import { getTestimonialsCountGrpc } from '../../../api/GrpcClient';
+import { getTestimonials, getTestimonialsCount } from '../../../api/httpClient';
 import type { Testimonial } from '../../../interfaces/Testimonial';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
