@@ -11,7 +11,8 @@
     "test": "npm run test:e2e:ci",
     "start": "vite",
     "generate:proto": "protoc --ts_proto_out=src/generated --ts_proto_opt=env=browser,outputServices=generic-definitions,outputServices=nice-grpc --proto_path=../src/grpc ../src/grpc/*.proto",
-    "build": "npm run generate:proto && tsc && vite build",
+    "prebuild": "npm run generate:proto",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "format": "prettier  --check .",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
