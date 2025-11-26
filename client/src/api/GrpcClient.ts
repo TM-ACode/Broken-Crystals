@@ -11,10 +11,7 @@ import {
   FileServiceDefinition,
   type FileServiceClient
 } from '../generated/file';
-import {
-  OsServiceDefinition,
-  type OsServiceClient
-} from '../generated/os';
+import { OsServiceDefinition, type OsServiceClient } from '../generated/os';
 
 export class GrpcClient {
   private static instance: GrpcClient;
