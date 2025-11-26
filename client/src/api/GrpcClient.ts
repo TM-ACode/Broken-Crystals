@@ -54,7 +54,7 @@ export async function viewProductGrpc(
 }
 
 export async function getTestimonialsCountGrpc(
-  query: string
+  query: string = 'select count(1) as count from testimonial'
 ): Promise<TestimonialsCountResponse> {
   const client = GrpcClient.getInstance();
   return client.testimonials.testimonialsCount({ query });

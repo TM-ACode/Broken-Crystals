@@ -22,8 +22,8 @@ export const Testimonials: FC<Props> = (props: Props) => {
   useEffect(() => {
     getTestimonials().then((data) => setTestimonials(data));
     getTestimonialsCount().then((data) => setTestimonialsCount(data));
-    getTestimonialsCountGrpc('select count(1) as count from testimonial').then(
-      (data) => setTestimonialsCountGrpc(data.count)
+    getTestimonialsCountGrpc().then((data) =>
+      setTestimonialsCountGrpc(data.count)
     );
   }, []);
 
@@ -31,9 +31,9 @@ export const Testimonials: FC<Props> = (props: Props) => {
     if (newTestimonial) {
       getTestimonials().then((data) => setTestimonials(data));
       getTestimonialsCount().then((data) => setTestimonialsCount(data));
-      getTestimonialsCountGrpc(
-        'select count(1) as count from testimonial'
-      ).then((data) => setTestimonialsCountGrpc(data.count));
+      getTestimonialsCountGrpc().then((data) =>
+        setTestimonialsCountGrpc(data.count)
+      );
       return () => setTestimonials([]);
     }
   }, [newTestimonial]);
